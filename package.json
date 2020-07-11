@@ -1,0 +1,27 @@
+{
+  "name": "web-piano",
+  "version": "1.0.0",
+  "description": "Smart piano in browser",
+  "main": "index.js",
+  "scripts": {
+    "build": "snowpack build",
+    "dev": "snowpack dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/34x/web-piano.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/34x/web-piano/issues"
+  },
+  "homepage": "https://github.com/34x/web-piano#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "snowpack": "^2.6.4",
+    "typescript": "^3.9.6"
+  }
+}
