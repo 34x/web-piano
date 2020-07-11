@@ -1,7 +1,7 @@
-{
-    "out": "./build",
-    "clean": true,
-    "scripts": {
+module.exports = {
+    out: "./build",
+    clean: true,
+    scripts: {
         "mount:public": "mount public --to /",
         "mount:src": "mount src --to /bundle",
         "run:tsc": "tsc",
