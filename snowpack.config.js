@@ -6,5 +6,10 @@ module.exports = {
         "mount:src": "mount src --to /bundle",
         "run:tsc": "tsc",
         "run:tsc::watch": "$1 --watch"
+    },
+    installOptions: {
+        rollup: {
+          plugins: [require("rollup-plugin-node-polyfills")()]
+        }
     }
 }
