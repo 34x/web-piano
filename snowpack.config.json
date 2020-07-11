@@ -1,8 +1,10 @@
 {
-	"out": "./build",
-	"clean": true,
-	"scripts": {
-		"mount:public": "mount public --to /",
-		"mount:src": "mount src --to /bundle"
-	}
+    "out": "./build",
+    "clean": true,
+    "scripts": {
+        "mount:public": "mount public --to /",
+        "mount:src": "mount src --to /bundle",
+        "run:tsc": "tsc",
+        "run:tsc::watch": "$1 --watch"
+    }
 }
