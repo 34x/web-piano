@@ -19,7 +19,9 @@
     "url": "https://github.com/34x/web-piano/issues"
   },
   "homepage": "https://github.com/34x/web-piano#readme",
-  "dependencies": {},
+  "dependencies": {
+    "midi-player-js": "^2.0.13"
+  },
   "devDependencies": {
     "rollup-plugin-node-polyfills": "^0.2.1",
     "snowpack": "^2.6.4",
