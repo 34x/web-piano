@@ -1,32 +1,30 @@
 import MidiPlayerJS from 'midi-player-js';
+import Soundfont from 'soundfont-player';
 import { base64ArrayBuffer } from './utils';
 
 export class MidiPlayer {
-    play() {
-        // console.log(MidiPlayerJS);
+
+    async play() {
+        const ac = new AudioContext()
+        const instrument = await Soundfont.instrument(ac, 'acoustic_grand_piano', { soundfont: 'MusyngKite' });
+        console.log(instrument);
+
         // Initialize player and register event handler
-        const player = new MidiPlayerJS.Player(function(event:any) {
+        const player = new MidiPlayerJS.Player(function(event: any) {
             console.log(event);
+            if(!(event.velocity > 0 && event.name == "Note on")) {
+                return
+            }
+            instrument.play(event.noteName)
         });
 
-
-
-        this.load().then(data => {
-
-            // console.log(data)
-            player.loadDataUri(data);
-            // player.play();
-
-
-        })
-        // // Load a MIDI file
-
-
-
+        const midiData = await this.load();
+        await player.loadDataUri(midiData);
+        player.play();
     }
 
     async load() {
-        const response = await fetch('/midi/21_Guns.mid');
+        const response = await fetch('/midi/DavyJones.midi');
         // const reader = await response.body.getReader();
         // const result = await reader.read();
         // const encoded = btoa(result);
