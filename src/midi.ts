@@ -1,23 +1,26 @@
 import MidiPlayerJS from 'midi-player-js';
+import Soundfont from 'soundfont-player';
 import { base64ArrayBuffer } from './utils';
 
 export class MidiPlayer {
 
     async play() {
-        // const instrument = await load instrument
+        const ac = new AudioContext()
+        const instrument = await Soundfont.instrument(ac, 'acoustic_grand_piano', { soundfont: 'MusyngKite' });
+        console.log(instrument);
 
         // Initialize player and register event handler
-        const player = new MidiPlayerJS.Player(function(event:any) {
+        const player = new MidiPlayerJS.Player(function(event: any) {
             console.log(event);
-            // event.name = "Note on"
-            // event.noteName = "C4"
-
-            // instrument.play(event.noteName)
+            if(!(event.velocity > 0 && event.name == "Note on")) {
+                return
+            }
+            instrument.play(event.noteName)
         });
 
         const midiData = await this.load();
         await player.loadDataUri(midiData);
-        // player.play();
+        player.play();
     }
 
     async load() {
