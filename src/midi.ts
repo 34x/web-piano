@@ -25,12 +25,12 @@ export class MidiPlayer {
         await this.player.loadDataUri(midiData);
 
         this.player.play();
+    }
+
+    stop () {
+        this.player.stop();
 
     }
-        stop () {
-            this.player.stop();
-
-        }
 
     async load() {
         const response = await fetch('/midi/DavyJones.midi');
