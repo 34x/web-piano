@@ -3,25 +3,34 @@ import Soundfont from 'soundfont-player';
 import { base64ArrayBuffer } from './utils';
 
 export class MidiPlayer {
+    ac: AudioContext;
+    player: any;
+
+    constructor() {
+        this.ac = new AudioContext();
+    }
 
     async play() {
-        const ac = new AudioContext()
-        const instrument = await Soundfont.instrument(ac, 'acoustic_grand_piano', { soundfont: 'MusyngKite' });
-        console.log(instrument);
+        const instrument = await Soundfont.instrument(this.ac, 'acoustic_grand_piano', { soundfont: 'MusyngKite' });
 
-        // Initialize player and register event handler
-        const player = new MidiPlayerJS.Player(function(event: any) {
-            console.log(event);
+        this.player = new MidiPlayerJS.Player(function(event: any){
+            // console.log(event);
             if(!(event.velocity > 0 && event.name == "Note on")) {
                 return
             }
-            instrument.play(event.noteName)
+            instrument.play(event.noteName);
         });
 
         const midiData = await this.load();
-        await player.loadDataUri(midiData);
-        player.play();
+        await this.player.loadDataUri(midiData);
+
+        this.player.play();
+
     }
+        stop () {
+            this.player.stop();
+
+        }
 
     async load() {
         const response = await fetch('/midi/DavyJones.midi');
