@@ -1,30 +1,37 @@
 <script>
-	import { MidiPlayer } from './midi';
+    import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
 
-	const player = new MidiPlayer();
-	let isPlay = false;
-	let imgSrc = './play.png';
-	
-	function playBtnHandler() {
-		if(isPlay) {
-			player.stop();
-			isPlay = false;
-			imgSrc = './play.png';
-		} else {
-			player.play();
-			isPlay = true;
-			imgSrc = './pause.png';
-		}
-	}
+
+    const player = new MidiPlayer();
+
+    let playerState = player.getState();
+    player.onStateChange(event => playerState = event.state);
+
+    player.loadUrl('/midi/DavyJones.midi');
+
+    function playBtnHandler() {
+        if(player.getState() === MidiPlayerState.playing) {
+            player.stop();
+        } else {
+            player.play();
+        }
+    }
+
+    const getButtonImage = (state) => state === MidiPlayerState.playing ? './pause.png' : './play.png';
+
+    $: buttonImage = getButtonImage(playerState);
+
 </script>
 
-<h1>web-piano</h1>
-<img on:click={playBtnHandler} src={imgSrc} alt="кнопка играть">
+<center>
+    <h1>web-piano</h1>
+    <img on:click={playBtnHandler} src={buttonImage} alt="кнопка играть">
+</center>
 
-	<style>
-		img {
-			width: 40px;
-			height: 40px;
-			cursor: pointer;
-	}
-	</style>
+    <style>
+        img {
+            width: 128px;
+            height: 128px;
+            cursor: pointer;
+    }
+    </style>

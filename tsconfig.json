@@ -7,7 +7,11 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "outDir": "./build"
+        "outDir": "./build",
+        "baseUrl": ".",
+        "paths": {
+            "src/*": ["src/*"]
+        }
     },
     "include": [
         "src/**/*"
