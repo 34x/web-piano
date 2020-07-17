@@ -1,13 +1,12 @@
-<script>
+<script type="typescript">
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
 
-
-    const player = new MidiPlayer();
+    const player: MidiPlayer = new MidiPlayer();
 
     let playerState = player.getState();
     player.onStateChange(event => playerState = event.state);
 
-    player.loadUrl('/midi/DavyJones.midi');
+    player.loadUrl('/midi/DavyJones2.mid');
 
     function playBtnHandler() {
         if(player.getState() === MidiPlayerState.playing) {

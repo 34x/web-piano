@@ -5,11 +5,10 @@ module.exports = {
     scripts: {
         "mount:public": "mount public --to /",
         "mount:src": "mount src --to /bundle",
-        "run:tsc": "tsc",
+        "run:tsc": "tsc --noEmit",
         "run:tsc::watch": "$1 --watch"
     },
     installOptions: {
-        plugins: ["@snowpack/plugin-svelte"],
         rollup: {
             plugins: [require("rollup-plugin-node-polyfills")()]
         }
