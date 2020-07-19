@@ -1,4 +1,4 @@
-import MidiPlayerJS from "https://github.com/34x/web-piano#readme/web_modules/midi-player-js.js";
+import MidiPlayerJS from "/web-piano/web_modules/midi-player-js.js";
 import {base64ArrayBuffer} from "/bundle/utils.js";
 export var MidiReaderEvent;
 (function(MidiReaderEvent2) {

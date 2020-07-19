@@ -18,7 +18,7 @@ import {
 	text,
 	transition_in,
 	transition_out
-} from "https://github.com/34x/web-piano#readme/web_modules/svelte/internal.js";
+} from "/web-piano/web_modules/svelte/internal.js";
 
 import ControlsUI from "/bundle/compound-components/player-ui/controls-ui.js";
 import PlaylistUI from "/bundle/compound-components/player-ui/playlist-ui.js";

@@ -15,11 +15,11 @@ import {
 	space,
 	text,
 	toggle_class
-} from "https://github.com/34x/web-piano#readme/web_modules/svelte/internal.js";
+} from "/web-piano/web_modules/svelte/internal.js";
 
 import contents from "/midi/contents.json.proxy.js";
-import { createEventDispatcher } from "https://github.com/34x/web-piano#readme/web_modules/svelte.js";
-import { setContext } from "https://github.com/34x/web-piano#readme/web_modules/svelte.js";
+import { createEventDispatcher } from "/web-piano/web_modules/svelte.js";
+import { setContext } from "/web-piano/web_modules/svelte.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();

@@ -1,5 +1,5 @@
 import {MidiReader, MidiReaderEvent} from "/bundle/components/midi-reader/index.js";
-import Soundfont from "https://github.com/34x/web-piano#readme/web_modules/soundfont-player.js";
+import Soundfont from "/web-piano/web_modules/soundfont-player.js";
 export var MidiPlayerState;
 (function(MidiPlayerState2) {
   MidiPlayerState2[MidiPlayerState2["playing"] = 0] = "playing";

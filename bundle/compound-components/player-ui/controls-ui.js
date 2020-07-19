@@ -11,7 +11,7 @@ import {
 	listen,
 	noop,
 	safe_not_equal
-} from "https://github.com/34x/web-piano#readme/web_modules/svelte/internal.js";
+} from "/web-piano/web_modules/svelte/internal.js";
 
 import { MidiPlayer, MidiPlayerState } from "/bundle/compound-components/midi-player/index.js";
 
