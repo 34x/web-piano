@@ -38,9 +38,16 @@ export class MidiPlayer {
     }
 
     async loadUrl(url: string) {
+        const enterState = this.getState();
+        if(enterState == MidiPlayerState.playing) {
+            this.stop();
+        }
         await this.reader.loadUrl(url);
         const audioContext = new AudioContext();
         this.instrument = await Soundfont.instrument(audioContext, 'acoustic_grand_piano');
+        if(enterState == MidiPlayerState.playing) {
+            this.play();
+        }
     }
 
     // setInstrument(instrument: any, track: number) {
