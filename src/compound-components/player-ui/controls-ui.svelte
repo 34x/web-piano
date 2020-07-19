@@ -7,7 +7,7 @@
     let playerState = player.getState();
     player.onStateChange(event => playerState = event.state);
 
-    
+
     function loadSongUrl(filename) {
         player.loadUrl('/midi/' + filename);
     }
@@ -35,12 +35,6 @@
 </script>
 
 <center>
-    {#if fileInfo}
-        <h1>File info: {fileInfo.filename}</h1>
-    {:else}
-        -
-    {/if}
-    <h1>web-piano</h1>
     <img on:click={playBtnHandler} src={buttonImage} alt="кнопка играть">
 </center>
 
