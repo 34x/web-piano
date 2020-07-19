@@ -1,4 +1,5 @@
 module.exports = {
+    baseUrl: "/web-piano/",
     out: "./build",
     clean: true,
     extends: "@snowpack/app-scripts-svelte",
