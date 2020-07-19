@@ -27,6 +27,7 @@ jobs:
         npm run build
 
     - name: Publish on Github Pages
+      if: success()
       uses: crazy-max/ghaction-github-pages@v2.1.0
       with:
         target_branch: gh-pages
