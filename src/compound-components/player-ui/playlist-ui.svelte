@@ -5,6 +5,7 @@
 
     const dispatch = createEventDispatcher();
     let selectedIndex: number = 2
+    const contentsSorted = contents.sort((a, b) => a.title > b.title);
 
     function songChanged(content) {
         dispatch('songSelected', content)
@@ -22,7 +23,7 @@
 <center>
     <h2>Playlist</h2>
     <ul>
-		{#each contents as content, index}
+		{#each contentsSorted as content, index}
 			<li on:click={createSongChangeHandler(content)} class:selected={selectedIndex === index}>
 				{content.title}
 			</li>
