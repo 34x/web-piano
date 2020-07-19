@@ -3,12 +3,23 @@
     import { createEventDispatcher } from 'svelte';
     import { setContext } from 'svelte';
 
+    export let selected;
+
     const dispatch = createEventDispatcher();
     let selectedIndex: number = 2
+
     const contentsSorted = contents.sort((a, b) => a.title > b.title);
 
     function songChanged(content) {
         dispatch('songSelected', content)
+    }
+
+    function getSelectedIndex(aList, selectedItem) {
+        if (!selectedItem) {
+            return -1;
+        }
+
+        return aList.findIndex((el) => el.filename === selectedItem.filename)
     }
 
     function createSongChangeHandler(content) {
@@ -16,6 +27,10 @@
             songChanged(content);
         }
         return a;
+    }
+
+    $: {
+        selectedIndex = getSelectedIndex(contentsSorted, selected);
     }
 </script>
 

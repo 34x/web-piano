@@ -27,5 +27,5 @@
         {/if}
     </div>
     <ControlsUI fileInfo={currentSong}/>
-    <PlaylistUI on:songSelected={songSelected}/>
+    <PlaylistUI selected={currentSong} on:songSelected={songSelected}/>
 </div>
