@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "midi-player-js": "./midi-player-js.js",
+    "soundfont-player": "./soundfont-player.js",
+    "svelte": "./svelte.js",
+    "svelte/internal": "./svelte/internal.js"
+  }
+}
