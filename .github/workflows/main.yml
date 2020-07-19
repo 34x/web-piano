@@ -25,23 +25,11 @@ jobs:
       run: |
         npm install
         npm run build
-    - name: GitHub Pages
-    
+
     - name: Publish on Github Pages
+      if: success()
       uses: crazy-max/ghaction-github-pages@v2.1.0
       with:
-        # Git branch where assets will be deployed
-#         It seems like there is no way right now to define a specific branch for github pages in the ui
-#         target_branch: github-pages # optional, default is gh-pages
-        # Create incremental commit instead of doing push force
-        keep_history: true # optional, default is false
-        # Allow an empty commit to be created
-#         allow_empty_commit: # optional, default is true
-        # Build directory to deploy
+        target_branch: gh-pages
+        keep_history: true
         build_dir: build
-        # The committer name and email address
-#        committer: # optional
-        # The author name and email address
-#        author: # optional
-        # Commit message
-#        commit_message: # optional
