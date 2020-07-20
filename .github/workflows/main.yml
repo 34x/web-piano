@@ -25,7 +25,9 @@ jobs:
       run: |
         npm install
         npm run build
-        ./fix-imports.sh
+
+    - name: Fix imports
+      run: ./fix-imports.sh
 
     - name: Publish on Github Pages
       if: success()
