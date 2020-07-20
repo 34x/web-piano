@@ -17,7 +17,7 @@ import {
 	toggle_class
 } from "/web-piano/web_modules/svelte/internal.js";
 
-import contents from "/midi/contents.json.proxy.js";
+import contents from "/web-piano/midi/contents.json.proxy.js";
 import { createEventDispatcher } from "/web-piano/web_modules/svelte.js";
 import { setContext } from "/web-piano/web_modules/svelte.js";
 

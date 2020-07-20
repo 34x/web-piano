@@ -61,7 +61,7 @@ function instance($$self, $$props, $$invalidate) {
 	player.onStateChange(event => $$invalidate(3, playerState = event.state));
 
 	function loadSongUrl(filename) {
-		player.loadUrl("/midi/" + filename);
+		player.loadUrl("/web-piano/midi/" + filename);
 	}
 
 	function startNewSong(info) {

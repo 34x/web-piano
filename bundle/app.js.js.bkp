@@ -14,7 +14,7 @@ import {
 	transition_out
 } from "/web-piano/web_modules/svelte/internal.js";
 
-import PlayerUI from "/bundle/compound-components/player-ui/player-ui.js";
+import PlayerUI from "/web-piano/bundle/compound-components/player-ui/player-ui.js";
 
 function create_fragment(ctx) {
 	let center;
