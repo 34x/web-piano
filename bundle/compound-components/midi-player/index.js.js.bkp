@@ -1,4 +1,4 @@
-import {MidiReader, MidiReaderEvent} from "/web-piano/bundle/components/midi-reader/index.js";
+import {MidiReader, MidiReaderEvent} from "/bundle/components/midi-reader/index.js";
 import Soundfont from "/web-piano/web_modules/soundfont-player.js";
 export var MidiPlayerState;
 (function(MidiPlayerState2) {

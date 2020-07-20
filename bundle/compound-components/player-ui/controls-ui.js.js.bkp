@@ -13,7 +13,7 @@ import {
 	safe_not_equal
 } from "/web-piano/web_modules/svelte/internal.js";
 
-import { MidiPlayer, MidiPlayerState } from "/web-piano/bundle/compound-components/midi-player/index.js";
+import { MidiPlayer, MidiPlayerState } from "/bundle/compound-components/midi-player/index.js";
 
 function create_fragment(ctx) {
 	let center;

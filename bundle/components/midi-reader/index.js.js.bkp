@@ -1,5 +1,5 @@
 import MidiPlayerJS from "/web-piano/web_modules/midi-player-js.js";
-import {base64ArrayBuffer} from "/web-piano/bundle/utils.js";
+import {base64ArrayBuffer} from "/bundle/utils.js";
 export var MidiReaderEvent;
 (function(MidiReaderEvent2) {
   MidiReaderEvent2[MidiReaderEvent2["noteOn"] = 0] = "noteOn";
