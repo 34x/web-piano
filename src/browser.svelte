@@ -1,16 +1,13 @@
 <script>
-    const browsers = [
-        {name: 'Mozilla Firefox', link: 'https://www.mozilla.org/ru/firefox/'},
-        {name: 'Chrome', link: 'https://www.google.com/chrome/'}
-        ]
+import {browsers} from 'src/components/browser'
 </script>
 
 <center>
-    <h2>К соажелнию наше приложожение работает только в браузерах Chrome и Mozilla Firefox</h2>
-    <ul>
+    <h2>Unfortunately our app works only in the following browsers.</h2>
+    <ul class="browsers-links">
 		{#each browsers as browser, index}
-			<li>
-				Скачать <a href={browser.link}>{browser.name}</a>
+			<li class="browsers-links__item">
+				Download: <a href={browser.link}>{browser.name}</a>
 			</li>
 		{/each}
     </ul>
@@ -20,15 +17,16 @@
     h2 {
         width: 50%;
     }
-    ul {
+    .browsers-links {
         list-style: none;
         margin: 0px;
         padding: 0px;;
     }
-
-    li {
+    .browsers-links__item {
         text-align: center;
         padding: 0.8em;
         border-bottom: 1px solid lightgray;
     }
+
+
 </style>

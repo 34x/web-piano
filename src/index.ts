@@ -1,22 +1,13 @@
-const code = navigator.appCodeName;
 import App from "./app.svelte";
 import Browser from "./browser.svelte";
+import { isBrowserSupported } from 'src/components/browser';
 
-function browserCheck () {
-    if(code == 'Mozilla' || code == 'Chrome') {
-        const app = new App({
-            target: document.body,
-        });
+const ActualApp = isBrowserSupported(navigator) ? App : Browser;
 
-    }
-    else {
-        const browser = new Browser({
-            target:document.body
-        })
-    }
-}
+const app = new ActualApp({
+    target: document.body,
+}) 
 
-browserCheck();
 
 
 
