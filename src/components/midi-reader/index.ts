@@ -45,6 +45,10 @@ export class MidiReader {
 		this.eventHandlers[event] = handler;
 	}
 
+	getMidiInfo() {
+		return this.reader
+	}
+
 	private onReaderEvent(event: any) {
 		if(event.velocity > 0 && event.name == "Note on") {
 			const handler = this.eventHandlers[MidiReaderEvent.noteOn];

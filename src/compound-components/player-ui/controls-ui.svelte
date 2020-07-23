@@ -2,6 +2,7 @@
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
 
     export let fileInfo;
+    export let midiFileInfo;
     const player = new MidiPlayer();
 
     let playerState = player.getState();
@@ -9,11 +10,16 @@
 
 
     function loadSongUrl(filename) {
+        
         player.loadUrl('/midi/' + filename);
+        
+
     }
 
     function startNewSong(info) {
         if (info) {
+            midiFileInfo = player.getInfo(); 
+            console.log(midiFileInfo);
             loadSongUrl(info.filename);
         }
     }

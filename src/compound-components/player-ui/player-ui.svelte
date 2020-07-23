@@ -26,6 +26,13 @@
             Please selecte a piece from playlist
         {/if}
     </div>
+    <!-- <div class="midi-info">
+        {#if currentInfo}
+            <b>{currentInfo}</b>
+        {:else}
+            Please selecte a piece from playlist for midi-info
+        {/if}
+    </div> -->
     <ControlsUI fileInfo={currentSong}/>
     <PlaylistUI selected={currentSong} on:songSelected={songSelected}/>
 </div>
