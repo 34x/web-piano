@@ -32,6 +32,7 @@
             player.stop();
         } else {
             player.play();
+            updateProgressBar();
         }
     }
 
@@ -39,10 +40,29 @@
 
     $: buttonImage = getButtonImage(playerState);
 
+    function updateProgressBar() {
+        const maxWidth = midiFileInfo.totalTicks;
+        const progressBar = document.getElementById("greenBar");
+
+        let timerId = setInterval(() => {
+            if (player.getState() !== MidiPlayerState.playing) {
+                clearInterval(timerId);
+                return;
+            }
+            const width = player.getCurrentTick() / (maxWidth / 100);
+            progressBar.style.width = width + '%';  
+
+        }, 10);
+
+    }
+
 </script>
 
 <center>
     <img on:click={playBtnHandler} src={buttonImage} alt="кнопка играть">
+    <div id="greyProgress">
+        <div id="greenBar"></div>
+      </div>
 </center>
 
 <style>
@@ -50,5 +70,20 @@
         width: 128px;
         height: 128px;
         cursor: pointer;
-}
+    }
+
+    #greyProgress {
+        text-align: left;
+        width: 100%;
+        background-color: #ddd;
+        }
+
+    #greenBar {
+        width: 0%;
+        height: 10px;
+        background-color: #4CAF50;
+        text-align: center;
+        line-height: 10px;
+        color: white;
+    }
 </style>

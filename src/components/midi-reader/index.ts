@@ -52,9 +52,14 @@ export class MidiReader {
         const info = {
             tempo: this.reader.tempo,
             tracks: this.reader.tracks,
-            instruments: this.reader.instruments
+			instruments: this.reader.instruments,
+			totalTicks: this.reader.totalTicks,
         }
         return info
+	}
+
+	getCurrentTick() {
+		return this.reader.getCurrentTick();
 	}
 
 	private onReaderEvent(event: any) {
