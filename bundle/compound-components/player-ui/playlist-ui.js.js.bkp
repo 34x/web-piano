@@ -151,7 +151,7 @@ function instance($$self, $$props, $$invalidate) {
 	let { selected } = $$props;
 	const dispatch = createEventDispatcher();
 	let selectedIndex = 2;
-	const contentsSorted = contents.sort((a, b) => a.title > b.title);
+	const contentsSorted = contents.sort((a, b) => a.title.localeCompare(b.title));
 
 	function songChanged(content) {
 		dispatch("songSelected", content);

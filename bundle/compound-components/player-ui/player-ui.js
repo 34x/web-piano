@@ -23,7 +23,7 @@ import {
 import ControlsUI from "/web-piano/bundle/compound-components/player-ui/controls-ui.js";
 import PlaylistUI from "/web-piano/bundle/compound-components/player-ui/playlist-ui.js";
 
-function create_else_block(ctx) {
+function create_else_block_1(ctx) {
 	let t;
 
 	return {
@@ -40,8 +40,8 @@ function create_else_block(ctx) {
 	};
 }
 
-// (22:8) {#if currentSong}
-function create_if_block(ctx) {
+// (30:8) {#if currentSong}
+function create_if_block_1(ctx) {
 	let t0;
 	let b;
 	let t1_value = /*currentSong*/ ctx[0].title + "";
@@ -82,65 +82,168 @@ function create_if_block(ctx) {
 	};
 }
 
+// (41:8) {:else}
+function create_else_block(ctx) {
+	let t;
+
+	return {
+		c() {
+			t = text("Please selecte a piece from playlist for midi-info");
+		},
+		m(target, anchor) {
+			insert(target, t, anchor);
+		},
+		p: noop,
+		d(detaching) {
+			if (detaching) detach(t);
+		}
+	};
+}
+
+// (37:8) {#if currentMidi}
+function create_if_block(ctx) {
+	let t0;
+	let b0;
+	let t1_value = /*currentMidi*/ ctx[1].tempo + "";
+	let t1;
+	let t2;
+	let b1;
+	let t3_value = /*currentMidi*/ ctx[1].tracks.length + "";
+	let t3;
+	let t4;
+	let b2;
+	let t5_value = /*currentMidi*/ ctx[1].instruments.length + "";
+	let t5;
+
+	return {
+		c() {
+			t0 = text("Tempo: ");
+			b0 = element("b");
+			t1 = text(t1_value);
+			t2 = text(" \n            Tracks: ");
+			b1 = element("b");
+			t3 = text(t3_value);
+			t4 = text(" \n            Instruments: ");
+			b2 = element("b");
+			t5 = text(t5_value);
+		},
+		m(target, anchor) {
+			insert(target, t0, anchor);
+			insert(target, b0, anchor);
+			append(b0, t1);
+			insert(target, t2, anchor);
+			insert(target, b1, anchor);
+			append(b1, t3);
+			insert(target, t4, anchor);
+			insert(target, b2, anchor);
+			append(b2, t5);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*currentMidi*/ 2 && t1_value !== (t1_value = /*currentMidi*/ ctx[1].tempo + "")) set_data(t1, t1_value);
+			if (dirty & /*currentMidi*/ 2 && t3_value !== (t3_value = /*currentMidi*/ ctx[1].tracks.length + "")) set_data(t3, t3_value);
+			if (dirty & /*currentMidi*/ 2 && t5_value !== (t5_value = /*currentMidi*/ ctx[1].instruments.length + "")) set_data(t5, t5_value);
+		},
+		d(detaching) {
+			if (detaching) detach(t0);
+			if (detaching) detach(b0);
+			if (detaching) detach(t2);
+			if (detaching) detach(b1);
+			if (detaching) detach(t4);
+			if (detaching) detach(b2);
+		}
+	};
+}
+
 function create_fragment(ctx) {
-	let div1;
+	let div2;
 	let div0;
 	let t0;
-	let controlsui;
+	let div1;
 	let t1;
+	let controlsui;
+	let t2;
 	let playlistui;
 	let current;
 
 	function select_block_type(ctx, dirty) {
-		if (/*currentSong*/ ctx[0]) return create_if_block;
-		return create_else_block;
+		if (/*currentSong*/ ctx[0]) return create_if_block_1;
+		return create_else_block_1;
 	}
 
 	let current_block_type = select_block_type(ctx, -1);
-	let if_block = current_block_type(ctx);
+	let if_block0 = current_block_type(ctx);
+
+	function select_block_type_1(ctx, dirty) {
+		if (/*currentMidi*/ ctx[1]) return create_if_block;
+		return create_else_block;
+	}
+
+	let current_block_type_1 = select_block_type_1(ctx, -1);
+	let if_block1 = current_block_type_1(ctx);
 
 	controlsui = new ControlsUI({
 			props: { fileInfo: /*currentSong*/ ctx[0] }
 		});
 
+	controlsui.$on("midiChanched", /*midiChanched*/ ctx[3]);
+
 	playlistui = new PlaylistUI({
 			props: { selected: /*currentSong*/ ctx[0] }
 		});
 
-	playlistui.$on("songSelected", /*songSelected*/ ctx[1]);
+	playlistui.$on("songSelected", /*songSelected*/ ctx[2]);
 
 	return {
 		c() {
-			div1 = element("div");
+			div2 = element("div");
 			div0 = element("div");
-			if_block.c();
+			if_block0.c();
 			t0 = space();
-			create_component(controlsui.$$.fragment);
+			div1 = element("div");
+			if_block1.c();
 			t1 = space();
+			create_component(controlsui.$$.fragment);
+			t2 = space();
 			create_component(playlistui.$$.fragment);
-			attr(div0, "class", "piece-info svelte-dp4d2d");
-			attr(div1, "class", "player-container svelte-dp4d2d");
+			attr(div0, "class", "piece-info svelte-r6839q");
+			attr(div1, "class", "midi-info svelte-r6839q");
+			attr(div2, "class", "player-container svelte-r6839q");
 		},
 		m(target, anchor) {
-			insert(target, div1, anchor);
-			append(div1, div0);
-			if_block.m(div0, null);
-			append(div1, t0);
-			mount_component(controlsui, div1, null);
-			append(div1, t1);
-			mount_component(playlistui, div1, null);
+			insert(target, div2, anchor);
+			append(div2, div0);
+			if_block0.m(div0, null);
+			append(div2, t0);
+			append(div2, div1);
+			if_block1.m(div1, null);
+			append(div2, t1);
+			mount_component(controlsui, div2, null);
+			append(div2, t2);
+			mount_component(playlistui, div2, null);
 			current = true;
 		},
 		p(ctx, [dirty]) {
-			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
-				if_block.p(ctx, dirty);
+			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block0) {
+				if_block0.p(ctx, dirty);
 			} else {
-				if_block.d(1);
-				if_block = current_block_type(ctx);
+				if_block0.d(1);
+				if_block0 = current_block_type(ctx);
 
-				if (if_block) {
-					if_block.c();
-					if_block.m(div0, null);
+				if (if_block0) {
+					if_block0.c();
+					if_block0.m(div0, null);
+				}
+			}
+
+			if (current_block_type_1 === (current_block_type_1 = select_block_type_1(ctx, dirty)) && if_block1) {
+				if_block1.p(ctx, dirty);
+			} else {
+				if_block1.d(1);
+				if_block1 = current_block_type_1(ctx);
+
+				if (if_block1) {
+					if_block1.c();
+					if_block1.m(div1, null);
 				}
 			}
 
@@ -163,8 +266,9 @@ function create_fragment(ctx) {
 			current = false;
 		},
 		d(detaching) {
-			if (detaching) detach(div1);
-			if_block.d();
+			if (detaching) detach(div2);
+			if_block0.d();
+			if_block1.d();
 			destroy_component(controlsui);
 			destroy_component(playlistui);
 		}
@@ -173,12 +277,17 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let currentSong;
+	let currentMidi;
 
 	function songSelected(event) {
 		$$invalidate(0, currentSong = event.detail);
 	}
 
-	return [currentSong, songSelected];
+	function midiChanched(event) {
+		$$invalidate(1, currentMidi = event.detail);
+	}
+
+	return [currentSong, currentMidi, songSelected, midiChanched];
 }
 
 class Player_ui extends SvelteComponent {

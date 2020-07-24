@@ -11,6 +11,7 @@ export class MidiReader {
     this.reader = new MidiPlayerJS.Player(this.onReaderEvent.bind(this));
   }
   async loadDataUri(dataUri) {
+    this.reader.instruments = [];
     await this.reader.loadDataUri(dataUri);
   }
   async loadUrl(url) {
@@ -29,6 +30,14 @@ export class MidiReader {
   }
   on(event, handler) {
     this.eventHandlers[event] = handler;
+  }
+  getMidiInfo() {
+    const info = {
+      tempo: this.reader.tempo,
+      tracks: this.reader.tracks,
+      instruments: this.reader.instruments
+    };
+    return info;
   }
   onReaderEvent(event) {
     if (event.velocity > 0 && event.name == "Note on") {

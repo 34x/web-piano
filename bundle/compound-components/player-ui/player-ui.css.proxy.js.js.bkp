@@ -1,5 +1,5 @@
 
-const code = ".player-container.svelte-dp4d2d{width:80em}.piece-info.svelte-dp4d2d{margin:0.4em;height:2em}";
+const code = ".player-container.svelte-r6839q{width:80em}.piece-info.svelte-r6839q{margin:0.4em;height:2em}.midi-info.svelte-r6839q{margin:0.4em;height:2em}";
 
 const styleEl = document.createElement("style");
 const codeEl = document.createTextNode(code);

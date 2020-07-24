@@ -27,6 +27,9 @@ export class MidiPlayer {
     this.changeState(2);
     this.reader.stopReading();
   }
+  getInfo() {
+    return this.reader.getMidiInfo();
+  }
   async loadUrl(url) {
     const enterState = this.getState();
     if (enterState == 0) {

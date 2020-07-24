@@ -14,6 +14,7 @@ import {
 } from "/web-piano/web_modules/svelte/internal.js";
 
 import { MidiPlayer, MidiPlayerState } from "/web-piano/bundle/compound-components/midi-player/index.js";
+import { createEventDispatcher } from "/web-piano/web_modules/svelte.js";
 
 function create_fragment(ctx) {
 	let center;
@@ -55,13 +56,54 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
+	var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+		function adopt(value) {
+			return value instanceof P
+			? value
+			: new P(function (resolve) {
+						resolve(value);
+					});
+		}
+
+		return new (P || (P = Promise))(function (resolve, reject) {
+				function fulfilled(value) {
+					try {
+						step(generator.next(value));
+					} catch(e) {
+						reject(e);
+					}
+				}
+
+				function rejected(value) {
+					try {
+						step(generator["throw"](value));
+					} catch(e) {
+						reject(e);
+					}
+				}
+
+				function step(result) {
+					result.done
+					? resolve(result.value)
+					: adopt(result.value).then(fulfilled, rejected);
+				}
+
+				step((generator = generator.apply(thisArg, _arguments || [])).next());
+			});
+	};
+
 	let { fileInfo } = $$props;
+	let { midiFileInfo } = $$props;
+	const dispatch = createEventDispatcher();
 	const player = new MidiPlayer();
 	let playerState = player.getState();
-	player.onStateChange(event => $$invalidate(3, playerState = event.state));
+	player.onStateChange(event => $$invalidate(4, playerState = event.state));
 
 	function loadSongUrl(filename) {
-		player.loadUrl("/web-piano/midi/" + filename);
+		return __awaiter(this, void 0, void 0, function* () {
+			yield player.loadUrl("/web-piano/midi/" + filename);
+			$$invalidate(2, midiFileInfo = player.getInfo());
+		});
 	}
 
 	function startNewSong(info) {
@@ -70,6 +112,7 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	}
 
+	
 	
 
 	function playBtnHandler() {
@@ -85,30 +128,37 @@ function instance($$self, $$props, $$invalidate) {
 	: "./play.png";
 
 	$$self.$set = $$props => {
-		if ("fileInfo" in $$props) $$invalidate(2, fileInfo = $$props.fileInfo);
+		if ("fileInfo" in $$props) $$invalidate(3, fileInfo = $$props.fileInfo);
+		if ("midiFileInfo" in $$props) $$invalidate(2, midiFileInfo = $$props.midiFileInfo);
 	};
 
 	let buttonImage;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*fileInfo*/ 4) {
+		if ($$self.$$.dirty & /*fileInfo*/ 8) {
 			$: {
 				startNewSong(fileInfo);
 			}
 		}
 
-		if ($$self.$$.dirty & /*playerState*/ 8) {
+		if ($$self.$$.dirty & /*midiFileInfo*/ 4) {
+			$: {
+				dispatch("midiChanched", midiFileInfo);
+			}
+		}
+
+		if ($$self.$$.dirty & /*playerState*/ 16) {
 			$: $$invalidate(0, buttonImage = getButtonImage(playerState));
 		}
 	};
 
-	return [buttonImage, playBtnHandler, fileInfo];
+	return [buttonImage, playBtnHandler, midiFileInfo, fileInfo];
 }
 
 class Controls_ui extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 2 });
+		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 3, midiFileInfo: 2 });
 	}
 }
 
