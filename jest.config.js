@@ -1,8 +1,8 @@
 module.exports = {
   ...require('@snowpack/app-scripts-svelte/jest.config.js')(),
-  // modulePaths: ["src"],
+  modulePaths: ['<rootDir>/src'],
   moduleNameMapper: {
-	  '^src(.*)': '<rootDir>/src$1',
-	  '^public(.*)': '<rootDir>/public$1'
+	  '^src(.*)': '<rootDir>src$1',
+	  '^public(.*)': '<rootDir>public$1'
   }
 };
