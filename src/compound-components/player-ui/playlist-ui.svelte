@@ -1,9 +1,11 @@
 <script>
-    import contents from 'public/midi/contents.json'
+    import { getContents } from 'src/components/midi-contents';
     import { createEventDispatcher } from 'svelte';
     import { setContext } from 'svelte';
-
+    
     export let selected;
+    
+    const contents = getContents();
 
     const dispatch = createEventDispatcher();
     let selectedIndex: number = 2
