@@ -8,7 +8,7 @@
     const contents = getContents();
 
     const dispatch = createEventDispatcher();
-    let selectedIndex: number = 2
+    let selectedIndex: number = -1;
 
     const contentsSorted = contents.sort((a, b) => a.title.localeCompare(b.title));
 
