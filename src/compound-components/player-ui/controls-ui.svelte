@@ -1,30 +1,31 @@
 <script>
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
+    import { createEventDispatcher } from 'svelte';
 
     export let fileInfo;
     export let midiFileInfo;
+
+    const dispatch = createEventDispatcher();
+
     const player = new MidiPlayer();
 
     let playerState = player.getState();
     player.onStateChange(event => playerState = event.state);
 
 
-    function loadSongUrl(filename) {
-        
-        player.loadUrl('/midi/' + filename);
-        
-
+    async function loadSongUrl(filename) {
+        await player.loadUrl('/midi/' + filename);
+        midiFileInfo = player.getInfo(); 
     }
 
     function startNewSong(info) {
         if (info) {
-            midiFileInfo = player.getInfo(); 
-            console.log(midiFileInfo);
             loadSongUrl(info.filename);
         }
     }
 
     $:{startNewSong(fileInfo)};
+    $:{dispatch('midiChanched', midiFileInfo)};
 
     function playBtnHandler() {
         if(player.getState() === MidiPlayerState.playing) {
