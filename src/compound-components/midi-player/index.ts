@@ -38,13 +38,7 @@ export class MidiPlayer {
     }
 
     getInfo() {
-        const temp = this.reader.getMidiInfo()
-        const info = {
-            tempo: temp.tempo,
-            tracks: temp.tracks,
-            instruments: temp.instruments
-        }
-        return info
+        return this.reader.getMidiInfo();
     }
 
     async loadUrl(url: string) {

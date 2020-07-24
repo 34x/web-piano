@@ -8,7 +8,6 @@
     }
     function midiChanched(event) {
         currentMidi = event.detail;
-        console.log(currentMidi);
     }
 </script>
 
