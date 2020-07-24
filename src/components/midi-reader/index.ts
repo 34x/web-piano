@@ -17,6 +17,9 @@ export class MidiReader {
 	}
 
 	async loadDataUri(dataUri: string) {
+		// clear list of instruments before load new MidiFile
+		// because MidiPlayer has a bug with instuments update
+		this.reader.instruments = [];
 		await this.reader.loadDataUri(dataUri);
 	}
 
@@ -43,6 +46,15 @@ export class MidiReader {
 
 	on(event: MidiReaderEvent, handler: MidiEventHandler) {
 		this.eventHandlers[event] = handler;
+	}
+
+	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
+        const info = {
+            tempo: this.reader.tempo,
+            tracks: this.reader.tracks,
+            instruments: this.reader.instruments
+        }
+        return info
 	}
 
 	private onReaderEvent(event: any) {
