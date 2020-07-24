@@ -8,12 +8,13 @@ export enum MidiPlayerState {
 }
 
 export class MidiPlayer {
-    private state: MidiPlayerState = MidiPlayerState.idle;
+    private state: MidiPlayerState;
     private reader: MidiReader;
     private instrument: any;
     private onStateChangeHandler: (event: any) => void;
 
     constructor() {
+        this.state = MidiPlayerState.idle
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
     }
