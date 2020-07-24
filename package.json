@@ -7,7 +7,7 @@
     "build": "snowpack build",
     "start": "snowpack dev",
     "dev": "snowpack dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,13 @@
     "svelte": "^3.21.0"
   },
   "devDependencies": {
-    "@snowpack/app-scripts-svelte": "^1.6.0-alpha.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@snowpack/app-scripts-svelte": "^1.7.0",
     "@snowpack/plugin-svelte": "^1.2.0",
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/svelte": "^3.0.0",
+    "@types/jest": "^26.0.4",
+    "jest": "^25.4.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "snowpack": "^2.6.4",
     "svelte-preprocess": "^4.0.8",
