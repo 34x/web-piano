@@ -33,8 +33,6 @@ jobs:
 
     # npm test -- --runTestsByPath src/browser.test.ts
     - name: Run tests
-      run: |
-        ls -lah node_modules
-        npm test -- --ci
+      run: npm test -- --ci
       env:
         CI: true
