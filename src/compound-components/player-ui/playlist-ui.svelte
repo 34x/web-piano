@@ -3,7 +3,7 @@
     import { createEventDispatcher } from 'svelte';
     import { setContext } from 'svelte';
 
-    export let selected;
+    export let selected = undefined;
 
     const contents = getContents();
 
