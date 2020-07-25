@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import App from "src/browser.svelte";
 import { browsers } from 'src/components/browser';
-import MidiPlayerJS from 'midi-player-jsaaa';
+import MidiPlayerJS from 'midi-player-js';
 
 test("renders browsers page", () => {
 	expect(true).toBeTruthy();
