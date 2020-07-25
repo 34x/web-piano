@@ -2,13 +2,13 @@
     import { getContents } from 'src/components/midi-contents';
     import { createEventDispatcher } from 'svelte';
     import { setContext } from 'svelte';
-    
+
     export let selected;
-    
+
     const contents = getContents();
 
     const dispatch = createEventDispatcher();
-    let selectedIndex: number = -1;
+    let selectedIndex = -1;
 
     const contentsSorted = contents.sort((a, b) => a.title.localeCompare(b.title));
 
@@ -39,13 +39,7 @@
 
 <center>
     <h2>Playlist</h2>
-    <ul>
-		{#each contentsSorted as content, index}
-			<li on:click={createSongChangeHandler(content)} class:selected={selectedIndex === index}>
-				{content.title}
-			</li>
-		{/each}
-    </ul>
+
 </center>
 
 <style>

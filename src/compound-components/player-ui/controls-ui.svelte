@@ -15,7 +15,7 @@
 
     async function loadSongUrl(filename) {
         await player.loadUrl('/midi/' + filename);
-        midiFileInfo = player.getInfo(); 
+        midiFileInfo = player.getInfo();
     }
 
     function startNewSong(info) {

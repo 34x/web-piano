@@ -36,8 +36,8 @@
     </div>
     <div class="midi-info">
         {#if currentMidi}
-            Tempo: <b>{currentMidi.tempo}</b> 
-            Tracks: <b>{currentMidi.tracks.length}</b> 
+            Tempo: <b>{currentMidi.tempo}</b>
+            Tracks: <b>{currentMidi.tracks.length}</b>
             Instruments: <b>{currentMidi.instruments.length}</b>
         {:else}
             Please selecte a piece from playlist for midi-info
