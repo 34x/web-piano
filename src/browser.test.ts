@@ -6,6 +6,7 @@ test("renders browsers page", () => {
 	expect(true).toBeTruthy();
 	expect(browsers).toBeTruthy();
 	expect(App).toBeTruthy();
+	expect(render).toBeTruthy();
   // const { getByText } = render(App);
   // const linkElement: HTMLElement = getByText(/Firefox/);
   // expect(linkElement).toBeInTheDocument();
