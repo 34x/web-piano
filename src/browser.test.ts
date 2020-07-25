@@ -6,7 +6,7 @@ import { browsers } from 'src/components/browser';
 test("renders browsers page", () => {
 	expect(true).toBeTruthy();
 	expect(browsers).toBeTruthy();
-	expect(App).toBeTruthy();
+	// expect(App).toBeTruthy();
 	// expect(MidiPlayerJS).toBeTruthy();
   // const { getByText } = render(App);
   // const linkElement: HTMLElement = getByText(/Firefox/);
