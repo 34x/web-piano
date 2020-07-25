@@ -22,9 +22,10 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    # npm test -- --ci --no-cache --detectOpenHandles --runInBand --debug
     - name: Run tests
       run: |
         ls -lah node_modules
-        npm test -- --ci --no-cache --detectOpenHandles --runInBand --debug
+        npm test -- --runTestsByPath src/browser.test.ts
       env:
         CI: true
