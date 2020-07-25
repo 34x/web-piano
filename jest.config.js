@@ -10,4 +10,7 @@ module.exports = {
   // moduleDirectories: [
   //   "node_modules"
   // ],
+  clearMocks: true,
+  resetMocks: true,
+  resetModules: true,
 };

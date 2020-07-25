@@ -24,6 +24,7 @@ jobs:
 
     - name: Run tests
       run: |
+        ls -lah node_modules
         npm test -- --ci --no-cache --detectOpenHandles --runInBand --debug
       env:
         CI: true
