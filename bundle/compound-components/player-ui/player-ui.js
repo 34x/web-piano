@@ -120,10 +120,10 @@ function create_if_block(ctx) {
 			t0 = text("Tempo: ");
 			b0 = element("b");
 			t1 = text(t1_value);
-			t2 = text(" \n            Tracks: ");
+			t2 = text("\n            Tracks: ");
 			b1 = element("b");
 			t3 = text(t3_value);
-			t4 = text(" \n            Instruments: ");
+			t4 = text("\n            Instruments: ");
 			b2 = element("b");
 			t5 = text(t5_value);
 		},

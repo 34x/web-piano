@@ -26,8 +26,7 @@ let json = [{
   filename: "Ed_Sheeran-Perfect.mid",
   title: "Ed Sheeran - Perfect"
 }, {
-  filename: "John_Lennon-Imagine.mid",
-  title: "John Lennon - Imagine"
+  filename: "John_Lennon-Imagine.mid"
 }, {
   filename: "Pixies-Where_Is_My_Mind.mid",
   title: "Pixies - Where Is My Mind"
@@ -41,7 +40,6 @@ let json = [{
   filename: "The_doors-Riders_on_the_storm.mid",
   title: "The Doors - Riders on The Storm"
 }, {
-  filename: "Fur_Elise.mid",
-  title: "Fur Elise"
+  filename: "Fur_Elise.mid"
 }];
 export default json;
