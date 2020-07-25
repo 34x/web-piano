@@ -1,6 +1,6 @@
 module.exports = {
   ...require('@snowpack/app-scripts-svelte/jest.config.js')(),
-  // modulePaths: [
-  //     '<rootDir>',
-  // ]
+  modulePaths: [
+      '<rootDir>',
+  ]
 };
