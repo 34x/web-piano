@@ -23,6 +23,7 @@ jobs:
       run: npm install
 
     - name: Run tests
-      run: npm test -- --ci
+      run: |
+        npm test -- --ci --no-cache --detectOpenHandles --runInBand --debug
       env:
         CI: true
