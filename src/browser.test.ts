@@ -7,7 +7,7 @@ test("renders browsers page", () => {
 	expect(true).toBeTruthy();
 	expect(browsers).toBeTruthy();
 	expect(App).toBeTruthy();
-	expect(MidiPlayerJS).toBeTruthy();
+	// expect(MidiPlayerJS).toBeTruthy();
   // const { getByText } = render(App);
   // const linkElement: HTMLElement = getByText(/Firefox/);
   // expect(linkElement).toBeInTheDocument();
