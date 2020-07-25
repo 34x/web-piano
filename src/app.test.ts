@@ -1,8 +1,8 @@
 import { render } from "@testing-library/svelte";
-import App from "src/browser.svelte";
+import App from "src/app.svelte";
 
-test("renders browsers page", () => {
+test("renders main app page", () => {
     const { getByText } = render(App);
-    const linkElement: HTMLElement = getByText(/Firefox/);
+    const linkElement: HTMLElement = getByText(/Playlist/);
     expect(linkElement).toBeInTheDocument();
 });
