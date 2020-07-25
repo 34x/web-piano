@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-// import App from "./browser.svelte";
+import App from "./browser.svelte";
 
 test("renders browsers page", () => {
   // const { getByText } = render(App);
