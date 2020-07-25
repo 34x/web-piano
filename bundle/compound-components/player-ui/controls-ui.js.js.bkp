@@ -92,8 +92,8 @@ function instance($$self, $$props, $$invalidate) {
 			});
 	};
 
-	let { fileInfo } = $$props;
-	let { midiFileInfo } = $$props;
+	let { fileInfo = undefined } = $$props;
+	let { midiFileInfo = undefined } = $$props;
 	const dispatch = createEventDispatcher();
 	const player = new MidiPlayer();
 	let playerState = player.getState();

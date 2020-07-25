@@ -42,7 +42,7 @@ function getSelectedIndex(aList, selectedItem) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let { selected } = $$props;
+	let { selected = undefined } = $$props;
 	const contents = getContents();
 	const dispatch = createEventDispatcher();
 	let selectedIndex = -1;
