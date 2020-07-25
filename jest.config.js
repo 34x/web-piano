@@ -4,7 +4,10 @@ module.exports = {
       'src(.*)': '<rootDir>/src$1',
       'public(.*)': '<rootDir>/public$1'
   },
-  modulePaths: [
-      '<rootDir>/node_modules'
-  ]
+  // modulePaths: [
+  //     '<rootDir>' , '<rootDir>/node_modules'
+  // ],
+  // moduleDirectories: [
+  //   "node_modules"
+  // ],
 };
