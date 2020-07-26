@@ -39,7 +39,13 @@
 
 <center>
     <h2>Playlist</h2>
-
+    <ul>
+        {#each contentsSorted as content, index}
+            <li on:click={createSongChangeHandler(content)} class:selected={selectedIndex === index}>
+                {content.title}
+            </li>
+        {/each}
+     </ul>
 </center>
 
 <style>
