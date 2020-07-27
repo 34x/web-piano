@@ -2,8 +2,8 @@
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
     import { createEventDispatcher } from 'svelte';
 
-    export let fileInfo;
-    export let midiFileInfo;
+    export let fileInfo = undefined;
+    export let midiFileInfo = undefined;
 
     const dispatch = createEventDispatcher();
 
@@ -15,7 +15,7 @@
 
     async function loadSongUrl(filename) {
         await player.loadUrl('/midi/' + filename);
-        midiFileInfo = player.getInfo(); 
+        midiFileInfo = player.getInfo();
     }
 
     function startNewSong(info) {

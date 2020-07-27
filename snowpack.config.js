@@ -10,6 +10,7 @@ module.exports = {
         "run:tsc::watch": "$1 --watch"
     },
     installOptions: {
+        installTypes: true,
         rollup: {
             plugins: [require("rollup-plugin-node-polyfills")()]
         }

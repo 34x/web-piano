@@ -9,10 +9,11 @@ export enum MidiReaderEvent {
 export type MidiEventHandler = (event: any) => void;
 
 export class MidiReader {
-	private eventHandlers: { [Key in MidiReaderEvent]?: MidiEventHandler } = {};
+	private eventHandlers: { [Key in MidiReaderEvent]?: MidiEventHandler };
 	private reader: MidiPlayerJS.Player;
 
 	constructor() {
+		this.eventHandlers = {};
 		this.reader = new MidiPlayerJS.Player(this.onReaderEvent.bind(this));
 	}
 
