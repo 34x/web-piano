@@ -1,8 +1,6 @@
 import contents2 from "/midi/contents.json.proxy.js";
-function normalizeElement(elem) {
-  const index = elem.filename.indexOf(".mid");
-  const temp = elem.filename.slice(0, index).replace(/-/g, " - ");
-  return temp.replace(/_/g, " ");
+export function normalizeElement(elem) {
+  return elem.filename.replace(/\.midi?/, "").replace(/-/g, " - ").replace(/_/g, " ");
 }
 function normalizeContents(list) {
   const normalizedList = list.map((e) => {
