@@ -6,9 +6,7 @@ const ActualApp = isBrowserSupported(navigator) ? App : Browser;
 
 const app = new ActualApp({
     target: document.body,
-}) 
-
-
+})
 
 
 
