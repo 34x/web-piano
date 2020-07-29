@@ -3,7 +3,8 @@ import { base64ArrayBuffer } from 'src/utils';
 
 export enum MidiReaderEvent {
 	noteOn,
-	noteOff
+	noteOff,
+	trackEnd
 }
 
 export type MidiEventHandler = (event: any) => void;
@@ -69,6 +70,13 @@ export class MidiReader {
 			const handler = this.eventHandlers[MidiReaderEvent.noteOn];
 			if (handler) {
 				handler({ velocity: event.velocity, noteName: event.noteName, originalEvent: event });
+			}
+		}
+		if(event.name == "End of Track") {
+			const handler = this.eventHandlers[MidiReaderEvent.trackEnd];
+			if (handler) {
+				handler({originalEvent: event });
+
 			}
 		}
 	}

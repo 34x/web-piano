@@ -17,6 +17,7 @@ export class MidiPlayer {
         this.state = MidiPlayerState.idle
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
+        this.reader.on(MidiReaderEvent.trackEnd, this.stop.bind(this));
     }
 
     getState(): MidiPlayerState {
@@ -33,7 +34,7 @@ export class MidiPlayer {
         this.reader.stopReading();
     }
 
-    stop() {
+    stop(event: any) {
         this.changeState(MidiPlayerState.idle);
         this.reader.stopReading();
     }
