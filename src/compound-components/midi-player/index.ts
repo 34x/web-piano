@@ -42,10 +42,10 @@ export class MidiPlayer {
         return this.reader.getMidiInfo();
     }
 
-    getCurrentTick() {
-		return this.reader.getCurrentTick();
-	}
-
+    getPlayedPercent() {
+		return this.reader.getPlayedPercent();
+    }
+    
     async loadUrl(url: string) {
         const enterState = this.getState();
         if(enterState == MidiPlayerState.playing) {

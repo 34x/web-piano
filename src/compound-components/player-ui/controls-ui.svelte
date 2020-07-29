@@ -41,19 +41,16 @@
     $: buttonImage = getButtonImage(playerState);
 
     function updateProgressBar() {
-        const maxWidth = midiFileInfo.totalTicks;
         const progressBar = document.getElementById("greenBar");
-
         let timerId = setInterval(() => {
             if (player.getState() !== MidiPlayerState.playing) {
                 clearInterval(timerId);
                 return;
             }
-            const width = player.getCurrentTick() / (maxWidth / 100);
+            const width = player.getPlayedPercent();
             progressBar.style.width = width + '%';  
 
         }, 10);
-
     }
 
 </script>

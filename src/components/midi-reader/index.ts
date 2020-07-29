@@ -54,13 +54,14 @@ export class MidiReader {
             tempo: this.reader.tempo,
             tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
-			totalTicks: this.reader.totalTicks,
         }
         return info
 	}
 
-	getCurrentTick() {
-		return this.reader.getCurrentTick();
+	getPlayedPercent(): number {
+		const totalTicks = this.reader.totalTicks;
+		const currentTick = this.reader.getCurrentTick();
+		return currentTick / (totalTicks / 100)
 	}
 
 	private onReaderEvent(event: any) {
