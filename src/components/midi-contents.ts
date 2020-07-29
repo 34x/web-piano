@@ -1,9 +1,9 @@
 import contents from 'public/midi/contents.json'
 
-function normalizeElement(elem: any) {
-    const index = elem.filename.indexOf('.mid');
-    const temp = elem.filename.slice(0, index).replace(/-/g, ' - ');
-    return temp.replace(/_/g, ' ');
+export function normalizeElement(elem: { filename: string, title?: string }) {
+    return elem.filename.replace(/\.midi?/, '')
+        .replace(/-/g, ' - ')
+        .replace(/_/g, ' ');
 
 }
 

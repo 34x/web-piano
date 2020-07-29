@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import App from "./playlist-ui.svelte";
 
-test("renders main app page", () => {
+test("renders playlist component", () => {
     const { getByText } = render(App);
     expect(getByText(/Adele - Someone Like You/)).toBeInTheDocument();
     expect(getByText(/Billy Joel - Piano Man/)).toBeInTheDocument();
