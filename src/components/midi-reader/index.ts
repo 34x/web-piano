@@ -4,6 +4,7 @@ import { base64ArrayBuffer } from 'src/utils';
 export enum MidiReaderEvent {
 	noteOn,
 	noteOff,
+	tick,
 	trackEnd
 }
 
@@ -52,15 +53,15 @@ export class MidiReader {
 
 	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
         const info = {
-            tempo: this.reader.tempo,
-            tracks: this.reader.tracks,
+			tempo: this.reader.tempo,
+			tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
         }
         return info
 	}
 
 	getPlayedPercent(): number {
-		const totalTicks = this.reader.totalTicks;
+		const totalTicks = (this.reader as any).totalTicks;
 		const currentTick = this.reader.getCurrentTick();
 		return currentTick / (totalTicks / 100)
 	}
@@ -72,11 +73,16 @@ export class MidiReader {
 				handler({ velocity: event.velocity, noteName: event.noteName, originalEvent: event });
 			}
 		}
+		if(event.tick) {
+			const handler = this.eventHandlers[MidiReaderEvent.tick];
+			if (handler) {
+				handler({originalEvent: event });
+			}
+		}
 		if(event.name == "End of Track") {
 			const handler = this.eventHandlers[MidiReaderEvent.trackEnd];
 			if (handler) {
 				handler({originalEvent: event });
-
 			}
 		}
 	}

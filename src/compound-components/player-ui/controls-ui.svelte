@@ -6,11 +6,14 @@
     export let midiFileInfo = undefined;
 
     const dispatch = createEventDispatcher();
-
+    
     const player = new MidiPlayer();
-
+    
     let playerState = player.getState();
+    let progress = 0;
+
     player.onStateChange(event => playerState = event.state);
+    player.onProgressChange(event => progress = event.progress);
 
 
     async function loadSongUrl(filename) {
@@ -32,7 +35,6 @@
             player.stop();
         } else {
             player.play();
-            updateProgressBar();
         }
     }
 
@@ -40,25 +42,12 @@
 
     $: buttonImage = getButtonImage(playerState);
 
-    function updateProgressBar() {
-        const progressBar = document.getElementById("greenBar");
-        let timerId = setInterval(() => {
-            if (player.getState() !== MidiPlayerState.playing) {
-                clearInterval(timerId);
-                return;
-            }
-            const width = player.getPlayedPercent();
-            progressBar.style.width = width + '%';  
-
-        }, 10);
-    }
-
 </script>
 
 <center>
     <img on:click={playBtnHandler} src={buttonImage} alt="кнопка играть">
     <div id="greyProgress">
-        <div id="greenBar"></div>
+        <div style="width: {progress}%" id="greenBar"></div>
       </div>
 </center>
 
