@@ -41,8 +41,9 @@
     <h2>Playlist</h2>
     <ul>
         {#each contentsSorted as content, index}
-            <li on:click={createSongChangeHandler(content)} class:selected={selectedIndex === index}>
-                {content.title}
+            <li  class:selected={selectedIndex === index}>
+                <span on:click={createSongChangeHandler(content)}>{content.title}</span>
+                <a href="./public/midi/{content.filename}" download><img src="./download.png" alt="download"></a>
             </li>
         {/each}
      </ul>
@@ -57,9 +58,21 @@
 
     li {
         text-align: left;
-        cursor: pointer;
         padding: 0.8em;
         border-bottom: 1px solid lightgray;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    span {
+        cursor: pointer;
+    }
+
+    img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+
     }
 
     .selected {
