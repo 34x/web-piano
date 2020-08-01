@@ -31,27 +31,47 @@ function get_each_context(ctx, list, i) {
 // (33:8) {#each contentsSorted as content, index}
 function create_each_block(ctx) {
 	let li;
+	let span;
 	let t0_value = /*content*/ ctx[7].title + "";
 	let t0;
 	let t1;
+	let a;
+	let img;
+	let img_src_value;
+	let a_href_value;
+	let t2;
 	let mounted;
 	let dispose;
 
 	return {
 		c() {
 			li = element("li");
+			span = element("span");
 			t0 = text(t0_value);
 			t1 = space();
-			attr(li, "class", "svelte-7pfboe");
+			a = element("a");
+			img = element("img");
+			t2 = space();
+			attr(span, "class", "svelte-1fhnq7g");
+			if (img.src !== (img_src_value = "./download.png")) attr(img, "src", img_src_value);
+			attr(img, "alt", "download");
+			attr(img, "class", "svelte-1fhnq7g");
+			attr(a, "href", a_href_value = "./midi/" + /*content*/ ctx[7].filename);
+			attr(a, "download", "");
+			attr(li, "class", "svelte-1fhnq7g");
 			toggle_class(li, "selected", /*selectedIndex*/ ctx[0] === /*index*/ ctx[9]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
-			append(li, t0);
+			append(li, span);
+			append(span, t0);
 			append(li, t1);
+			append(li, a);
+			append(a, img);
+			append(li, t2);
 
 			if (!mounted) {
-				dispose = listen(li, "click", /*createSongChangeHandler*/ ctx[2](/*content*/ ctx[7]));
+				dispose = listen(span, "click", /*createSongChangeHandler*/ ctx[2](/*content*/ ctx[7]));
 				mounted = true;
 			}
 		},
@@ -94,7 +114,7 @@ function create_fragment(ctx) {
 				each_blocks[i].c();
 			}
 
-			attr(ul, "class", "svelte-7pfboe");
+			attr(ul, "class", "svelte-1fhnq7g");
 		},
 		m(target, anchor) {
 			insert(target, center, anchor);
@@ -107,7 +127,7 @@ function create_fragment(ctx) {
 			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*selectedIndex, createSongChangeHandler, contentsSorted*/ 7) {
+			if (dirty & /*selectedIndex, contentsSorted, createSongChangeHandler*/ 7) {
 				each_value = /*contentsSorted*/ ctx[1];
 				let i;
 
