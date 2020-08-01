@@ -43,7 +43,7 @@
         {#each contentsSorted as content, index}
             <li  class:selected={selectedIndex === index}>
                 <span on:click={createSongChangeHandler(content)}>{content.title}</span>
-                <a href="./public/midi/{content.filename}" download><img src="./download.png" alt="download"></a>
+                <a href="./midi/{content.filename}" download><img src="./download.png" alt="download"></a>
             </li>
         {/each}
      </ul>
