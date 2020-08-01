@@ -12,11 +12,14 @@ export class MidiPlayer {
     private reader: MidiReader;
     private instrument: any;
     private onStateChangeHandler: (event: any) => void;
+    private onProgressChangeHandler: (event: any) => void;
 
     constructor() {
         this.state = MidiPlayerState.idle
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
+        this.reader.on(MidiReaderEvent.tick, this.onTick.bind(this));
+        this.reader.on(MidiReaderEvent.trackEnd, this.stop.bind(this));
     }
 
     getState(): MidiPlayerState {
@@ -42,6 +45,10 @@ export class MidiPlayer {
         return this.reader.getMidiInfo();
     }
 
+    getPlayedPercent() {
+		return this.reader.getPlayedPercent();
+    }
+    
     async loadUrl(url: string) {
         const enterState = this.getState();
         if(enterState == MidiPlayerState.playing) {
@@ -62,6 +69,9 @@ export class MidiPlayer {
     onStateChange(handler: (event: any) => void) {
         this.onStateChangeHandler = handler;
     }
+    onProgressChange(handler: (event: any) => void) {
+        this.onProgressChangeHandler = handler;
+    }
 
     private changeState(state: MidiPlayerState) {
         this.state = state;
@@ -70,7 +80,14 @@ export class MidiPlayer {
         }
     }
 
+    private onTick(event: any) {
+        if (this.onProgressChangeHandler) {
+            this.onProgressChangeHandler({ progress: this.getPlayedPercent() });
+        }
+    }
+
     private onNoteOn(event: any) {
         this.instrument.play(event.noteName)
+        
     }
 }
