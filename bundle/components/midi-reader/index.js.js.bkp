@@ -4,6 +4,8 @@ export var MidiReaderEvent;
 (function(MidiReaderEvent2) {
   MidiReaderEvent2[MidiReaderEvent2["noteOn"] = 0] = "noteOn";
   MidiReaderEvent2[MidiReaderEvent2["noteOff"] = 1] = "noteOff";
+  MidiReaderEvent2[MidiReaderEvent2["tick"] = 2] = "tick";
+  MidiReaderEvent2[MidiReaderEvent2["trackEnd"] = 3] = "trackEnd";
 })(MidiReaderEvent || (MidiReaderEvent = {}));
 export class MidiReader {
   constructor() {
@@ -39,6 +41,11 @@ export class MidiReader {
     };
     return info;
   }
+  getPlayedPercent() {
+    const totalTicks = this.reader.totalTicks;
+    const currentTick = this.reader.getCurrentTick();
+    return currentTick / (totalTicks / 100);
+  }
   onReaderEvent(event) {
     if (event.velocity > 0 && event.name == "Note on") {
       const handler = this.eventHandlers[0];
@@ -46,6 +53,22 @@ export class MidiReader {
         handler({
           velocity: event.velocity,
           noteName: event.noteName,
+          originalEvent: event
+        });
+      }
+    }
+    if (event.tick) {
+      const handler = this.eventHandlers[2];
+      if (handler) {
+        handler({
+          originalEvent: event
+        });
+      }
+    }
+    if (event.name == "End of Track") {
+      const handler = this.eventHandlers[3];
+      if (handler) {
+        handler({
           originalEvent: event
         });
       }

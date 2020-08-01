@@ -10,7 +10,9 @@ import {
 	insert,
 	listen,
 	noop,
-	safe_not_equal
+	safe_not_equal,
+	set_style,
+	space
 } from "/web-piano/web_modules/svelte/internal.js";
 
 import { MidiPlayer, MidiPlayerState } from "/web-piano/bundle/compound-components/midi-player/index.js";
@@ -20,6 +22,9 @@ function create_fragment(ctx) {
 	let center;
 	let img;
 	let img_src_value;
+	let t;
+	let div1;
+	let div0;
 	let mounted;
 	let dispose;
 
@@ -27,22 +32,37 @@ function create_fragment(ctx) {
 		c() {
 			center = element("center");
 			img = element("img");
-			if (img.src !== (img_src_value = /*buttonImage*/ ctx[0])) attr(img, "src", img_src_value);
+			t = space();
+			div1 = element("div");
+			div0 = element("div");
+			if (img.src !== (img_src_value = /*buttonImage*/ ctx[1])) attr(img, "src", img_src_value);
 			attr(img, "alt", "кнопка играть");
-			attr(img, "class", "svelte-13qs7mt");
+			attr(img, "class", "svelte-r2omvd");
+			set_style(div0, "width", /*progress*/ ctx[0] + "%");
+			attr(div0, "id", "greenBar");
+			attr(div0, "class", "svelte-r2omvd");
+			attr(div1, "id", "greyProgress");
+			attr(div1, "class", "svelte-r2omvd");
 		},
 		m(target, anchor) {
 			insert(target, center, anchor);
 			append(center, img);
+			append(center, t);
+			append(center, div1);
+			append(div1, div0);
 
 			if (!mounted) {
-				dispose = listen(img, "click", /*playBtnHandler*/ ctx[1]);
+				dispose = listen(img, "click", /*playBtnHandler*/ ctx[2]);
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*buttonImage*/ 1 && img.src !== (img_src_value = /*buttonImage*/ ctx[0])) {
+			if (dirty & /*buttonImage*/ 2 && img.src !== (img_src_value = /*buttonImage*/ ctx[1])) {
 				attr(img, "src", img_src_value);
+			}
+
+			if (dirty & /*progress*/ 1) {
+				set_style(div0, "width", /*progress*/ ctx[0] + "%");
 			}
 		},
 		i: noop,
@@ -97,12 +117,14 @@ function instance($$self, $$props, $$invalidate) {
 	const dispatch = createEventDispatcher();
 	const player = new MidiPlayer();
 	let playerState = player.getState();
-	player.onStateChange(event => $$invalidate(4, playerState = event.state));
+	let progress = 0;
+	player.onStateChange(event => $$invalidate(5, playerState = event.state));
+	player.onProgressChange(event => $$invalidate(0, progress = event.progress));
 
 	function loadSongUrl(filename) {
 		return __awaiter(this, void 0, void 0, function* () {
 			yield player.loadUrl("/web-piano/midi/" + filename);
-			$$invalidate(2, midiFileInfo = player.getInfo());
+			$$invalidate(3, midiFileInfo = player.getInfo());
 		});
 	}
 
@@ -128,37 +150,37 @@ function instance($$self, $$props, $$invalidate) {
 	: "./play.png";
 
 	$$self.$set = $$props => {
-		if ("fileInfo" in $$props) $$invalidate(3, fileInfo = $$props.fileInfo);
-		if ("midiFileInfo" in $$props) $$invalidate(2, midiFileInfo = $$props.midiFileInfo);
+		if ("fileInfo" in $$props) $$invalidate(4, fileInfo = $$props.fileInfo);
+		if ("midiFileInfo" in $$props) $$invalidate(3, midiFileInfo = $$props.midiFileInfo);
 	};
 
 	let buttonImage;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*fileInfo*/ 8) {
+		if ($$self.$$.dirty & /*fileInfo*/ 16) {
 			$: {
 				startNewSong(fileInfo);
 			}
 		}
 
-		if ($$self.$$.dirty & /*midiFileInfo*/ 4) {
+		if ($$self.$$.dirty & /*midiFileInfo*/ 8) {
 			$: {
 				dispatch("midiChanched", midiFileInfo);
 			}
 		}
 
-		if ($$self.$$.dirty & /*playerState*/ 16) {
-			$: $$invalidate(0, buttonImage = getButtonImage(playerState));
+		if ($$self.$$.dirty & /*playerState*/ 32) {
+			$: $$invalidate(1, buttonImage = getButtonImage(playerState));
 		}
 	};
 
-	return [buttonImage, playBtnHandler, midiFileInfo, fileInfo];
+	return [progress, buttonImage, playBtnHandler, midiFileInfo, fileInfo];
 }
 
 class Controls_ui extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 3, midiFileInfo: 2 });
+		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 4, midiFileInfo: 3 });
 	}
 }
 
