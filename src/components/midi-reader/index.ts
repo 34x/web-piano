@@ -54,11 +54,21 @@ export class MidiReader {
 	}
 
 	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
+		
         const info = {
 			tempo: this.reader.tempo,
 			tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
-        }
+		}
+		this.reader.events.forEach((events, index) => {
+			events.forEach(e => {
+				if (e.name !== 'Program Change') {
+					return;
+				}
+
+				console.log(e);
+			})
+		})
         return info
 	}
 
@@ -69,9 +79,10 @@ export class MidiReader {
 	}
 
 	private onReaderEvent(event: any) {
+		// console.log(event)
 
 		if (event.name == "Program Change") {
-			console.log(event)
+			// console.log(event)
 		}
 		// console.log('this.reader.instruments');
 		// console.log(this.reader.instruments);

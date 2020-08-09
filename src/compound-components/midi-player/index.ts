@@ -1,6 +1,7 @@
 import { MidiReader, MidiReaderEvent } from 'src/components/midi-reader';
 import { Instrument, SoundfontInstrument, SilentInstrument } from 'src/components/instrument';
 import { getInstrumentByNumber }from 'src/components/instrument/instruments_list'
+import { instrument } from 'soundfont-player';
 
 export enum MidiPlayerState {
     playing,
@@ -88,7 +89,6 @@ export class MidiPlayer {
         this.instrumentsCash = {};
 
         const instrumentsName = this.reader.getMidiInfo().instruments.map(getInstrumentByNumber);
-        console.log(instrumentsName);
         // this.instruments.push(new SilentInstrument());
         for (let instrument of instrumentsName) {
             try{
@@ -102,10 +102,14 @@ export class MidiPlayer {
             }
             
         }
+        const i = new SoundfontInstrument();
+        await i.load()
+        this.instruments[0] = i
     }
 
     private getInstrument(channel: number):Instrument {
         const instrument = this.instruments[channel]
+        console.log(this.instruments[channel]);
         if (instrument) {
             return instrument
         }

@@ -35,6 +35,11 @@ export class SoundfontInstrument implements Instrument {
     }
 
     async load() {
-        this.instrument = await Soundfont.instrument(this.audioContext, this.name, { soundfont: 'FatBoy' }); 
+        const nameToUrl = (name: string, sf: string, format: string) => {
+            format = 'mp3';
+            return 'https://gleitz.github.io/midi-js-soundfonts/' + sf + '/' + name + '-' + format + '.js'
+        };
+
+        this.instrument = await Soundfont.instrument(this.audioContext, this.name, { soundfont: 'FatBoy', nameToUrl: nameToUrl}); 
     }
 }
