@@ -8,6 +8,7 @@ export enum InstrumentState {
 export interface Instrument {
     playNote(note: string): void;
     stopNote(note: string): void;
+    load(): void;
 
 
     getState(): InstrumentState;

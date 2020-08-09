@@ -1,4 +1,4 @@
-import { Instrument, InstrumentState } from './types.d';
+import { Instrument, InstrumentState } from './instrument';
 
 // this instrument may be used e.g. when a user wants to have a sound from a midi keyboard directly
 
@@ -13,5 +13,9 @@ export class SilentInstrument implements Instrument {
 
     getState() {
         return InstrumentState.ready;
+    }
+
+    load() {
+        
     }
 }
