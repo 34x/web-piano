@@ -6,12 +6,13 @@ export type SoundfontInstrumentConfiguration = {
 }
 
 export class SoundfontInstrument implements Instrument {
-    private currentState: InstrumentState = InstrumentState.created;
+    private currentState: InstrumentState;
     private audioContext: any;
     private instrument: any;
     private name: Soundfont.InstrumentName;
 
     constructor() {
+        this.currentState = InstrumentState.created;
         this.audioContext = new AudioContext()
         this.name = 'acoustic_grand_piano'
     }
