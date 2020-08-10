@@ -1,11 +1,12 @@
 import MidiPlayerJS from 'midi-player-js';
 import { base64ArrayBuffer } from 'src/utils';
+import { getInstrumentByNumber } from 'src/components/instrument/instruments_list';
 
 export enum MidiReaderEvent {
 	noteOn,
 	noteOff,
 	tick,
-	trackEnd
+	trackEnd,
 }
 
 export type MidiEventHandler = (event: any) => void;
@@ -51,13 +52,27 @@ export class MidiReader {
 		this.eventHandlers[event] = handler;
 	}
 
-	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
+	getMidiInfo():{tempo:number, tracks:any, instruments:any, instrumentsChannel:{[key:number]:string}} {
         const info = {
 			tempo: this.reader.tempo,
 			tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
-        }
+			instrumentsChannel: this.getInstrumentsChannels(this.reader),
+		}
         return info
+	}
+
+	getInstrumentsChannels(reader: any):{[key: number]: string}  {
+		const instrumentChannel:{[key: number]: string} = {}
+		reader.events.forEach((events: any) => {
+			events.forEach((e: any) => {
+				if (e.name !== 'Program Change') {
+					return;
+				}
+				instrumentChannel[e.channel] = getInstrumentByNumber(e.value);
+			})
+		})
+		return instrumentChannel;
 	}
 
 	getPlayedPercent(): number {
@@ -70,7 +85,13 @@ export class MidiReader {
 		if(event.velocity > 0 && event.name == "Note on") {
 			const handler = this.eventHandlers[MidiReaderEvent.noteOn];
 			if (handler) {
-				handler({ velocity: event.velocity, noteName: event.noteName, originalEvent: event });
+				handler({ 
+					velocity: event.velocity, 
+					noteName: event.noteName, 
+					originalEvent: event, 
+					track: event.track, 
+					channel: event.channel,
+				});
 			}
 		}
 		if(event.tick) {

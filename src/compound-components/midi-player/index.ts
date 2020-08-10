@@ -1,5 +1,7 @@
 import { MidiReader, MidiReaderEvent } from 'src/components/midi-reader';
-import Soundfont from 'soundfont-player';
+import { Instrument, SoundfontInstrument, SilentInstrument } from 'src/components/instrument';
+import { getInstrumentByNumber }from 'src/components/instrument/instruments_list'
+import { instrument } from 'soundfont-player';
 
 export enum MidiPlayerState {
     playing,
@@ -10,7 +12,8 @@ export enum MidiPlayerState {
 export class MidiPlayer {
     private state: MidiPlayerState;
     private reader: MidiReader;
-    private instrument: any;
+    private instruments: {[key:string]: Instrument};
+    private instrumentsCash: {[key:string]: Instrument}
     private onStateChangeHandler: (event: any) => void;
     private onProgressChangeHandler: (event: any) => void;
 
@@ -55,12 +58,13 @@ export class MidiPlayer {
             this.stop();
         }
         await this.reader.loadUrl(url);
-        const audioContext = new AudioContext();
-        this.instrument = await Soundfont.instrument(audioContext, 'acoustic_grand_piano');
+        await this.loadInstruments();
+        
         if(enterState == MidiPlayerState.playing) {
             this.play();
         }
     }
+    
 
     // setInstrument(instrument: any, track: number) {
 
@@ -71,6 +75,30 @@ export class MidiPlayer {
     }
     onProgressChange(handler: (event: any) => void) {
         this.onProgressChangeHandler = handler;
+    }    
+
+    private async loadInstruments() {
+
+        this.instruments = {};
+        const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;        
+        const instrumentChannelKeys = Object.keys(instrumentsChannel);
+
+        for (let i = 0; i < instrumentChannelKeys.length; i++) {
+            const instrument = new SoundfontInstrument();
+            const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
+            const channel = instrumentChannelKeys[i];
+            instrument.configure({name: instrumentName})
+            await instrument.load()
+            this.instruments[channel] = instrument;
+        }
+    }
+
+    private getInstrument(channel: number):Instrument {
+        const instrument = this.instruments[channel]
+        if (instrument) {
+            return instrument
+        }
+        return this.instruments[0];
     }
 
     private changeState(state: MidiPlayerState) {
@@ -87,7 +115,7 @@ export class MidiPlayer {
     }
 
     private onNoteOn(event: any) {
-        this.instrument.play(event.noteName)
+        this.getInstrument(event.channel).playNote(event.noteName)
         
     }
 }

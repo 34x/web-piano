@@ -32,4 +32,5 @@ From the user perspective the application contains:
 - [3d-piano-player](https://www.borjamorales.com/3d-piano-player/) - can be used as a base reference and getting ideas
 - [Euphony](https://github.com/qiao/euphony)
 - [Synthesia](https://synthesia.app)
+- [habr-link-about-MIDI.js] (https://habr.com/ru/post/257813/)
 
