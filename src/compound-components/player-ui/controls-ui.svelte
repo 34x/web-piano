@@ -11,7 +11,7 @@
     
     let playerState = player.getState();
     let progress = 0;
-    let loading = true;
+    let loading;
 
     player.onStateChange(event => playerState = event.state);
     player.onProgressChange(event => progress = event.progress);
@@ -49,21 +49,39 @@
 </script>
 
 <center>
-    {#if loading}
-        <button disabled style="filter: opacity(0.5);">
-            <img  src={buttonImage} alt="кнопка играть" >
-        </button>
+    {#if !fileInfo}
+    <button disabled style="filter: opacity(0.5);">
+        <img  src={buttonImage} alt="кнопка играть" >
+    </button>
     {:else}
-        <button on:click={playBtnHandler}>
-            <img  src={buttonImage} alt="кнопка играть">
-        </button>
+        {#if loading}
+            <button disabled style="cursor: auto;">
+                <img class="image" src="./loading.png" alt="">
+            </button>
+        {:else}
+            <button on:click={playBtnHandler}>
+                <img  src={buttonImage} alt="кнопка играть">
+            </button>
+        {/if}
+
     {/if}
+   
     <div id="greyProgress">
         <div style="width: {progress}%" id="greenBar"></div>
-      </div>
+    </div>
 </center>
 
 <style>
+    .image {
+        -webkit-animation:spin 4s linear infinite;
+        -moz-animation:spin 4s linear infinite;
+        animation:spin 4s linear infinite;
+    }
+
+    @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+    @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+    @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
     button {
         padding: 0;
         border: none;
@@ -71,11 +89,11 @@
         color: inherit;
         background-color: transparent;
         outline: none;
+        cursor: pointer;
     }
     img {
         width: 128px;
         height: 128px;
-        cursor: pointer;
     }
 
     #greyProgress {
