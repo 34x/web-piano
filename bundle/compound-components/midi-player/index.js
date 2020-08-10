@@ -1,5 +1,5 @@
 import {MidiReader, MidiReaderEvent} from "/web-piano/bundle/components/midi-reader/index.js";
-import Soundfont from "/web-piano/web_modules/soundfont-player.js";
+import {SoundfontInstrument} from "/web-piano/bundle/components/instrument/index.js";
 export var MidiPlayerState;
 (function(MidiPlayerState2) {
   MidiPlayerState2[MidiPlayerState2["playing"] = 0] = "playing";
@@ -41,8 +41,7 @@ export class MidiPlayer {
       this.stop();
     }
     await this.reader.loadUrl(url);
-    const audioContext = new AudioContext();
-    this.instrument = await Soundfont.instrument(audioContext, "acoustic_grand_piano");
+    await this.loadInstruments();
     if (enterState == 0) {
       this.play();
     }
@@ -52,6 +51,28 @@ export class MidiPlayer {
   }
   onProgressChange(handler) {
     this.onProgressChangeHandler = handler;
+  }
+  async loadInstruments() {
+    this.instruments = {};
+    const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;
+    const instrumentChannelKeys = Object.keys(instrumentsChannel);
+    for (let i = 0; i < instrumentChannelKeys.length; i++) {
+      const instrument3 = new SoundfontInstrument();
+      const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
+      const channel = instrumentChannelKeys[i];
+      instrument3.configure({
+        name: instrumentName
+      });
+      await instrument3.load();
+      this.instruments[channel] = instrument3;
+    }
+  }
+  getInstrument(channel) {
+    const instrument3 = this.instruments[channel];
+    if (instrument3) {
+      return instrument3;
+    }
+    return this.instruments[0];
   }
   changeState(state) {
     this.state = state;
@@ -69,6 +90,6 @@ export class MidiPlayer {
     }
   }
   onNoteOn(event) {
-    this.instrument.play(event.noteName);
+    this.getInstrument(event.channel).playNote(event.noteName);
   }
 }

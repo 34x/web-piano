@@ -1,5 +1,6 @@
 import MidiPlayerJS from "/web-piano/web_modules/midi-player-js.js";
 import {base64ArrayBuffer} from "/web-piano/bundle/utils.js";
+import {getInstrumentByNumber} from "/web-piano/bundle/components/instrument/instruments_list.js";
 export var MidiReaderEvent;
 (function(MidiReaderEvent2) {
   MidiReaderEvent2[MidiReaderEvent2["noteOn"] = 0] = "noteOn";
@@ -37,9 +38,22 @@ export class MidiReader {
     const info = {
       tempo: this.reader.tempo,
       tracks: this.reader.tracks,
-      instruments: this.reader.instruments
+      instruments: this.reader.instruments,
+      instrumentsChannel: this.getInstrumentsChannels(this.reader)
     };
     return info;
+  }
+  getInstrumentsChannels(reader) {
+    const instrumentChannel = {};
+    reader.events.forEach((events) => {
+      events.forEach((e) => {
+        if (e.name !== "Program Change") {
+          return;
+        }
+        instrumentChannel[e.channel] = getInstrumentByNumber(e.value);
+      });
+    });
+    return instrumentChannel;
   }
   getPlayedPercent() {
     const totalTicks = this.reader.totalTicks;
@@ -53,7 +67,9 @@ export class MidiReader {
         handler({
           velocity: event.velocity,
           noteName: event.noteName,
-          originalEvent: event
+          originalEvent: event,
+          track: event.track,
+          channel: event.channel
         });
       }
     }

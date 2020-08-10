@@ -1,4 +1,4 @@
-import {InstrumentState} from "./types.d.js";
+import {InstrumentState} from "./instrument.js";
 export class SilentInstrument {
   playNote(note) {
   }
@@ -6,5 +6,7 @@ export class SilentInstrument {
   }
   getState() {
     return InstrumentState.ready;
+  }
+  load() {
   }
 }
