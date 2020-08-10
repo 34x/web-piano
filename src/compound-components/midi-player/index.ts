@@ -80,14 +80,12 @@ export class MidiPlayer {
     private async loadInstruments() {
 
         this.instruments = {};
-        const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;
-
-        
+        const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;        
         const instrumentChannelKeys = Object.keys(instrumentsChannel);
 
         for (let i = 0; i < instrumentChannelKeys.length; i++) {
             const instrument = new SoundfontInstrument();
-            const instrumentName = instrumentsChannel[instrumentChannelKeys[i]];
+            const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
             const channel = instrumentChannelKeys[i];
             instrument.configure({name: instrumentName})
             await instrument.load()

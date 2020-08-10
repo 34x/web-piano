@@ -1,13 +1,12 @@
 import MidiPlayerJS from 'midi-player-js';
 import { base64ArrayBuffer } from 'src/utils';
-import { getInstrumentByNumber }from 'src/components/instrument/instruments_list';
+import { getInstrumentByNumber } from 'src/components/instrument/instruments_list';
 
 export enum MidiReaderEvent {
 	noteOn,
 	noteOff,
 	tick,
 	trackEnd,
-	programChange
 }
 
 export type MidiEventHandler = (event: any) => void;
@@ -53,25 +52,27 @@ export class MidiReader {
 		this.eventHandlers[event] = handler;
 	}
 
-	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
-		
-		
+	getMidiInfo():{tempo:number, tracks:any, instruments:any, instrumentsChannel:{[key:number]:string}} {
         const info = {
 			tempo: this.reader.tempo,
 			tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
-			instrumentsChannel: {},
+			instrumentsChannel: this.getInstrumentsChannels(this.reader),
 		}
-		this.reader.events.forEach((events) => {
-			events.forEach(e => {
+        return info
+	}
+
+	getInstrumentsChannels(reader: any):{[key: number]: string}  {
+		const instrumentChannel:{[key: number]: string} = {}
+		reader.events.forEach((events: any) => {
+			events.forEach((e: any) => {
 				if (e.name !== 'Program Change') {
 					return;
 				}
-				info.instrumentsChannel[e.channel] = getInstrumentByNumber(e.value);
+				instrumentChannel[e.channel] = getInstrumentByNumber(e.value);
 			})
 		})
-
-        return info
+		return instrumentChannel;
 	}
 
 	getPlayedPercent(): number {
@@ -81,16 +82,6 @@ export class MidiReader {
 	}
 
 	private onReaderEvent(event: any) {
-		// console.log(event)
-
-		if (event.name == "Program Change") {
-			// console.log(event)
-		}
-		// console.log('this.reader.instruments');
-		// console.log(this.reader.instruments);
-		// console.log('event.channel');
-		// console.log(event.channel);
-		// console.log(this.reader.tracks);
 		if(event.velocity > 0 && event.name == "Note on") {
 			const handler = this.eventHandlers[MidiReaderEvent.noteOn];
 			if (handler) {
@@ -113,16 +104,6 @@ export class MidiReader {
 			const handler = this.eventHandlers[MidiReaderEvent.trackEnd];
 			if (handler) {
 				handler({originalEvent: event });
-			}
-		}
-		if(event.name == "Program Change") {
-			const handler = this.eventHandlers[MidiReaderEvent.programChange];
-			if (handler) {
-				handler({
-					channel: event.channel,
-					instrumentNumber: event.value,
-					instrumentName: getInstrumentByNumber(event.value),
-				});
 			}
 		}
 	}
