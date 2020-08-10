@@ -55,20 +55,22 @@ export class MidiReader {
 
 	getMidiInfo():{tempo: number, tracks:any, instruments:any} {
 		
+		
         const info = {
 			tempo: this.reader.tempo,
 			tracks: this.reader.tracks,
 			instruments: this.reader.instruments,
+			instrumentsChannel: {},
 		}
-		this.reader.events.forEach((events, index) => {
+		this.reader.events.forEach((events) => {
 			events.forEach(e => {
 				if (e.name !== 'Program Change') {
 					return;
 				}
-
-				console.log(e);
+				info.instrumentsChannel[e.channel] = getInstrumentByNumber(e.value);
 			})
 		})
+
         return info
 	}
 

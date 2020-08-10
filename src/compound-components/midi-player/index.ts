@@ -12,7 +12,7 @@ export enum MidiPlayerState {
 export class MidiPlayer {
     private state: MidiPlayerState;
     private reader: MidiReader;
-    private instruments: {[key:number]: Instrument};
+    private instruments: {[key:string]: Instrument};
     private instrumentsCash: {[key:string]: Instrument}
     private onStateChangeHandler: (event: any) => void;
     private onProgressChangeHandler: (event: any) => void;
@@ -23,7 +23,6 @@ export class MidiPlayer {
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
         this.reader.on(MidiReaderEvent.tick, this.onTick.bind(this));
         this.reader.on(MidiReaderEvent.trackEnd, this.stop.bind(this));
-        this.reader.on(MidiReaderEvent.programChange, this.onInstrumentChange.bind(this));
     }
 
     getState(): MidiPlayerState {
@@ -76,40 +75,28 @@ export class MidiPlayer {
     }
     onProgressChange(handler: (event: any) => void) {
         this.onProgressChangeHandler = handler;
-    }
-    onInstrumentChange(event: any) {
-        this.instruments[event.channel] = this.instrumentsCash[event.instrumentName];
-    }
-
-    
+    }    
 
     private async loadInstruments() {
 
-        this.instruments = [];
-        this.instrumentsCash = {};
+        this.instruments = {};
+        const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;
 
-        const instrumentsName = this.reader.getMidiInfo().instruments.map(getInstrumentByNumber);
-        // this.instruments.push(new SilentInstrument());
-        for (let instrument of instrumentsName) {
-            try{
-                const i = new SoundfontInstrument();
-                i.configure({name: instrument})
-                await i.load()
-                this.instrumentsCash[instrument] = i
-            }
-            catch(error) {
-                console.error(error)
-            }
-            
+        
+        const instrumentChannelKeys = Object.keys(instrumentsChannel);
+
+        for (let i = 0; i < instrumentChannelKeys.length; i++) {
+            const instrument = new SoundfontInstrument();
+            const instrumentName = instrumentsChannel[instrumentChannelKeys[i]];
+            const channel = instrumentChannelKeys[i];
+            instrument.configure({name: instrumentName})
+            await instrument.load()
+            this.instruments[channel] = instrument;
         }
-        const i = new SoundfontInstrument();
-        await i.load()
-        this.instruments[0] = i
     }
 
     private getInstrument(channel: number):Instrument {
         const instrument = this.instruments[channel]
-        console.log(this.instruments[channel]);
         if (instrument) {
             return instrument
         }
