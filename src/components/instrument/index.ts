@@ -1,2 +1,3 @@
 export { SilentInstrument } from './silent-instrument';
-export { SoundfontInstrument, SoundfontInstrumentConfiguration } from './soundfont-instrument';
+export { SoundfontInstrument } from './soundfont-instrument';
+export type { Instrument } from './instrument'
