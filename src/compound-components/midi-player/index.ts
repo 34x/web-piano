@@ -13,12 +13,12 @@ export class MidiPlayer {
     private state: MidiPlayerState;
     private reader: MidiReader;
     private instruments: {[key:string]: Instrument};
-    private instrumentsCash: {[key:string]: Instrument}
+    private instrumentsCashe: {[key:string]: Instrument}
     private onStateChangeHandler: (event: any) => void;
     private onProgressChangeHandler: (event: any) => void;
 
     constructor() {
-        this.instrumentsCash = {};
+        this.instrumentsCashe = {};
         this.state = MidiPlayerState.idle;
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
@@ -85,15 +85,14 @@ export class MidiPlayer {
         return instrument
     }
     
-    private async getInstrumentFromCash(name: string) {
-        const instrument = this.instrumentsCash[name];
+    private async getInstrumentFromCashe(name: string) {
+        let instrument = this.instrumentsCashe[name];
         if (instrument) {
             return instrument
-        } else {
-            const instrument = await this.loadSingleInstrument(name);
-            this.instrumentsCash[name] = instrument;
-            return instrument
-        }
+        } 
+        instrument = await this.loadSingleInstrument(name);
+        this.instrumentsCashe[name] = instrument;
+        return instrument 
     }
 
     private async loadInstruments() {
@@ -103,7 +102,7 @@ export class MidiPlayer {
         for (let i = 0; i < instrumentChannelKeys.length; i++) {
             const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
             const channel = instrumentChannelKeys[i];
-            const instrument = await this.getInstrumentFromCash(instrumentName);
+            const instrument = await this.getInstrumentFromCashe(instrumentName);
             this.instruments[channel] = instrument;
         }
 
