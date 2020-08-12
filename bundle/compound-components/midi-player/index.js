@@ -8,6 +8,7 @@ export var MidiPlayerState;
 })(MidiPlayerState || (MidiPlayerState = {}));
 export class MidiPlayer {
   constructor() {
+    this.instrumentsCashe = {};
     this.state = 2;
     this.reader = new MidiReader();
     this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
@@ -52,18 +53,31 @@ export class MidiPlayer {
   onProgressChange(handler) {
     this.onProgressChangeHandler = handler;
   }
+  async loadSingleInstrument(name) {
+    const instrument3 = new SoundfontInstrument();
+    instrument3.configure({
+      name
+    });
+    await instrument3.load();
+    return instrument3;
+  }
+  async getInstrumentFromCashe(name) {
+    let instrument3 = this.instrumentsCashe[name];
+    if (instrument3) {
+      return instrument3;
+    }
+    instrument3 = await this.loadSingleInstrument(name);
+    this.instrumentsCashe[name] = instrument3;
+    return instrument3;
+  }
   async loadInstruments() {
     this.instruments = {};
     const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;
     const instrumentChannelKeys = Object.keys(instrumentsChannel);
     for (let i = 0; i < instrumentChannelKeys.length; i++) {
-      const instrument3 = new SoundfontInstrument();
       const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
       const channel = instrumentChannelKeys[i];
-      instrument3.configure({
-        name: instrumentName
-      });
-      await instrument3.load();
+      const instrument3 = await this.getInstrumentFromCashe(instrumentName);
       this.instruments[channel] = instrument3;
     }
   }
