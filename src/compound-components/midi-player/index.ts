@@ -13,12 +13,13 @@ export class MidiPlayer {
     private state: MidiPlayerState;
     private reader: MidiReader;
     private instruments: {[key:string]: Instrument};
-    private instrumentsCash: {[key:string]: Instrument}
+    private instrumentsCashe: {[key:string]: Instrument}
     private onStateChangeHandler: (event: any) => void;
     private onProgressChangeHandler: (event: any) => void;
 
     constructor() {
-        this.state = MidiPlayerState.idle
+        this.instrumentsCashe = {};
+        this.state = MidiPlayerState.idle;
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
         this.reader.on(MidiReaderEvent.tick, this.onTick.bind(this));
@@ -75,22 +76,36 @@ export class MidiPlayer {
     }
     onProgressChange(handler: (event: any) => void) {
         this.onProgressChangeHandler = handler;
-    }    
+    }
+    
+    private async loadSingleInstrument(name: string) {
+        const instrument = new SoundfontInstrument();
+        instrument.configure({name: name})
+        await instrument.load()
+        return instrument
+    }
+    
+    private async getInstrumentFromCashe(name: string) {
+        let instrument = this.instrumentsCashe[name];
+        if (instrument) {
+            return instrument
+        } 
+        instrument = await this.loadSingleInstrument(name);
+        this.instrumentsCashe[name] = instrument;
+        return instrument 
+    }
 
     private async loadInstruments() {
-
         this.instruments = {};
         const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;        
         const instrumentChannelKeys = Object.keys(instrumentsChannel);
-
         for (let i = 0; i < instrumentChannelKeys.length; i++) {
-            const instrument = new SoundfontInstrument();
             const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
             const channel = instrumentChannelKeys[i];
-            instrument.configure({name: instrumentName})
-            await instrument.load()
+            const instrument = await this.getInstrumentFromCashe(instrumentName);
             this.instruments[channel] = instrument;
         }
+
     }
 
     private getInstrument(channel: number):Instrument {
