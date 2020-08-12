@@ -78,51 +78,33 @@ export class MidiPlayer {
         this.onProgressChangeHandler = handler;
     }
     
-    isInstrumentInCash(list: {[key:string]: string}) {
-        const temp:{[key:string]: string} = {};
-        const cash = this.instrumentsCash;
-
-        for(let i in list) {
-            let match = false;
-            for(let name in cash) {
-                if (name === list[i]){
-                    match = true;
-                    break
-                } 
-            }
-            if (!match) {
-                temp[i] = list[i];
-            }
+    private async loadSingleInstrument(name: string) {
+        const instrument = new SoundfontInstrument();
+        instrument.configure({name: name})
+        await instrument.load()
+        return instrument
+    }
+    
+    private async getInstrumentFromCash(name: string) {
+        const instrument = this.instrumentsCash[name];
+        if (instrument) {
+            return instrument
+        } else {
+            const instrument = await this.loadSingleInstrument(name);
+            this.instrumentsCash[name] = instrument;
+            return instrument
         }
-        return temp;
     }
 
     private async loadInstruments() {
-        
         this.instruments = {};
         const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;        
         const instrumentChannelKeys = Object.keys(instrumentsChannel);
-        
         for (let i = 0; i < instrumentChannelKeys.length; i++) {
             const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
             const channel = instrumentChannelKeys[i];
-            let match = false;
-
-            for (let name in this.instrumentsCash) {
-                if (instrumentName === name) {
-                    this.instruments[channel] = this.instrumentsCash[name];
-                    match = true
-                    break
-                }
-            }
-            if (!match) {
-                const instrument = new SoundfontInstrument();
-                instrument.configure({name: instrumentName})
-                await instrument.load()
-                this.instruments[channel] = instrument;
-                this.instrumentsCash[instrumentName] = instrument;
-            }
-            
+            const instrument = await this.getInstrumentFromCash(instrumentName);
+            this.instruments[channel] = instrument;
         }
 
     }
