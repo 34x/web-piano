@@ -18,7 +18,8 @@ export class MidiPlayer {
     private onProgressChangeHandler: (event: any) => void;
 
     constructor() {
-        this.state = MidiPlayerState.idle
+        this.instrumentsCash = {};
+        this.state = MidiPlayerState.idle;
         this.reader = new MidiReader();
         this.reader.on(MidiReaderEvent.noteOn, this.onNoteOn.bind(this));
         this.reader.on(MidiReaderEvent.tick, this.onTick.bind(this));
@@ -75,22 +76,55 @@ export class MidiPlayer {
     }
     onProgressChange(handler: (event: any) => void) {
         this.onProgressChangeHandler = handler;
-    }    
+    }
+    
+    isInstrumentInCash(list: {[key:string]: string}) {
+        const temp:{[key:string]: string} = {};
+        const cash = this.instrumentsCash;
+
+        for(let i in list) {
+            let match = false;
+            for(let name in cash) {
+                if (name === list[i]){
+                    match = true;
+                    break
+                } 
+            }
+            if (!match) {
+                temp[i] = list[i];
+            }
+        }
+        return temp;
+    }
 
     private async loadInstruments() {
-
+        
         this.instruments = {};
         const instrumentsChannel = this.reader.getMidiInfo().instrumentsChannel;        
         const instrumentChannelKeys = Object.keys(instrumentsChannel);
-
+        
         for (let i = 0; i < instrumentChannelKeys.length; i++) {
-            const instrument = new SoundfontInstrument();
             const instrumentName = instrumentsChannel[parseInt(instrumentChannelKeys[i], 10)];
             const channel = instrumentChannelKeys[i];
-            instrument.configure({name: instrumentName})
-            await instrument.load()
-            this.instruments[channel] = instrument;
+            let match = false;
+
+            for (let name in this.instrumentsCash) {
+                if (instrumentName === name) {
+                    this.instruments[channel] = this.instrumentsCash[name];
+                    match = true
+                    break
+                }
+            }
+            if (!match) {
+                const instrument = new SoundfontInstrument();
+                instrument.configure({name: instrumentName})
+                await instrument.load()
+                this.instruments[channel] = instrument;
+                this.instrumentsCash[instrumentName] = instrument;
+            }
+            
         }
+
     }
 
     private getInstrument(channel: number):Instrument {
