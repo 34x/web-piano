@@ -18,59 +18,155 @@ import {
 import { MidiPlayer, MidiPlayerState } from "/web-piano/bundle/compound-components/midi-player/index.js";
 import { createEventDispatcher } from "/web-piano/web_modules/svelte.js";
 
-function create_fragment(ctx) {
-	let center;
+function create_else_block(ctx) {
+	let button;
 	let img;
 	let img_src_value;
-	let t;
-	let div1;
-	let div0;
 	let mounted;
 	let dispose;
 
 	return {
 		c() {
-			center = element("center");
+			button = element("button");
 			img = element("img");
-			t = space();
-			div1 = element("div");
-			div0 = element("div");
-			if (img.src !== (img_src_value = /*buttonImage*/ ctx[1])) attr(img, "src", img_src_value);
+			if (img.src !== (img_src_value = /*buttonImage*/ ctx[3])) attr(img, "src", img_src_value);
 			attr(img, "alt", "кнопка играть");
-			attr(img, "class", "svelte-r2omvd");
-			set_style(div0, "width", /*progress*/ ctx[0] + "%");
-			attr(div0, "id", "greenBar");
-			attr(div0, "class", "svelte-r2omvd");
-			attr(div1, "id", "greyProgress");
-			attr(div1, "class", "svelte-r2omvd");
+			attr(img, "class", "svelte-w2s6ff");
+			attr(button, "class", "svelte-w2s6ff");
 		},
 		m(target, anchor) {
-			insert(target, center, anchor);
-			append(center, img);
-			append(center, t);
-			append(center, div1);
-			append(div1, div0);
+			insert(target, button, anchor);
+			append(button, img);
 
 			if (!mounted) {
-				dispose = listen(img, "click", /*playBtnHandler*/ ctx[2]);
+				dispose = listen(button, "click", /*playBtnHandler*/ ctx[4]);
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
-			if (dirty & /*buttonImage*/ 2 && img.src !== (img_src_value = /*buttonImage*/ ctx[1])) {
+		p(ctx, dirty) {
+			if (dirty & /*buttonImage*/ 8 && img.src !== (img_src_value = /*buttonImage*/ ctx[3])) {
 				attr(img, "src", img_src_value);
 			}
+		},
+		d(detaching) {
+			if (detaching) detach(button);
+			mounted = false;
+			dispose();
+		}
+	};
+}
 
-			if (dirty & /*progress*/ 1) {
-				set_style(div0, "width", /*progress*/ ctx[0] + "%");
+// (60:8) {#if loading}
+function create_if_block_1(ctx) {
+	let button;
+
+	return {
+		c() {
+			button = element("button");
+			button.innerHTML = `<img class="image svelte-w2s6ff" src="./loading.png" alt="">`;
+			button.disabled = true;
+			set_style(button, "cursor", "auto");
+			attr(button, "class", "svelte-w2s6ff");
+		},
+		m(target, anchor) {
+			insert(target, button, anchor);
+		},
+		p: noop,
+		d(detaching) {
+			if (detaching) detach(button);
+		}
+	};
+}
+
+// (55:4) {#if !fileInfo}
+function create_if_block(ctx) {
+	let button;
+	let img;
+	let img_src_value;
+
+	return {
+		c() {
+			button = element("button");
+			img = element("img");
+			if (img.src !== (img_src_value = /*buttonImage*/ ctx[3])) attr(img, "src", img_src_value);
+			attr(img, "alt", "кнопка играть");
+			attr(img, "class", "svelte-w2s6ff");
+			button.disabled = true;
+			set_style(button, "filter", "opacity(0.5)");
+			attr(button, "class", "svelte-w2s6ff");
+		},
+		m(target, anchor) {
+			insert(target, button, anchor);
+			append(button, img);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*buttonImage*/ 8 && img.src !== (img_src_value = /*buttonImage*/ ctx[3])) {
+				attr(img, "src", img_src_value);
+			}
+		},
+		d(detaching) {
+			if (detaching) detach(button);
+		}
+	};
+}
+
+function create_fragment(ctx) {
+	let center;
+	let t;
+	let div1;
+	let div0;
+
+	function select_block_type(ctx, dirty) {
+		if (!/*fileInfo*/ ctx[0]) return create_if_block;
+		if (/*loading*/ ctx[2]) return create_if_block_1;
+		return create_else_block;
+	}
+
+	let current_block_type = select_block_type(ctx, -1);
+	let if_block = current_block_type(ctx);
+
+	return {
+		c() {
+			center = element("center");
+			if_block.c();
+			t = space();
+			div1 = element("div");
+			div0 = element("div");
+			set_style(div0, "width", /*progress*/ ctx[1] + "%");
+			attr(div0, "id", "greenBar");
+			attr(div0, "class", "svelte-w2s6ff");
+			attr(div1, "id", "greyProgress");
+			attr(div1, "class", "svelte-w2s6ff");
+		},
+		m(target, anchor) {
+			insert(target, center, anchor);
+			if_block.m(center, null);
+			append(center, t);
+			append(center, div1);
+			append(div1, div0);
+		},
+		p(ctx, [dirty]) {
+			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
+				if_block.p(ctx, dirty);
+			} else {
+				if_block.d(1);
+				if_block = current_block_type(ctx);
+
+				if (if_block) {
+					if_block.c();
+					if_block.m(center, t);
+				}
+			}
+
+			if (dirty & /*progress*/ 2) {
+				set_style(div0, "width", /*progress*/ ctx[1] + "%");
 			}
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
 			if (detaching) detach(center);
-			mounted = false;
-			dispose();
+			if_block.d();
 		}
 	};
 }
@@ -118,13 +214,16 @@ function instance($$self, $$props, $$invalidate) {
 	const player = new MidiPlayer();
 	let playerState = player.getState();
 	let progress = 0;
-	player.onStateChange(event => $$invalidate(5, playerState = event.state));
-	player.onProgressChange(event => $$invalidate(0, progress = event.progress));
+	let loading;
+	player.onStateChange(event => $$invalidate(6, playerState = event.state));
+	player.onProgressChange(event => $$invalidate(1, progress = event.progress));
 
 	function loadSongUrl(filename) {
 		return __awaiter(this, void 0, void 0, function* () {
+			$$invalidate(2, loading = true);
 			yield player.loadUrl("/web-piano/midi/" + filename);
-			$$invalidate(3, midiFileInfo = player.getInfo());
+			$$invalidate(2, loading = false);
+			$$invalidate(5, midiFileInfo = player.getInfo());
 		});
 	}
 
@@ -150,37 +249,37 @@ function instance($$self, $$props, $$invalidate) {
 	: "./play.png";
 
 	$$self.$set = $$props => {
-		if ("fileInfo" in $$props) $$invalidate(4, fileInfo = $$props.fileInfo);
-		if ("midiFileInfo" in $$props) $$invalidate(3, midiFileInfo = $$props.midiFileInfo);
+		if ("fileInfo" in $$props) $$invalidate(0, fileInfo = $$props.fileInfo);
+		if ("midiFileInfo" in $$props) $$invalidate(5, midiFileInfo = $$props.midiFileInfo);
 	};
 
 	let buttonImage;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*fileInfo*/ 16) {
+		if ($$self.$$.dirty & /*fileInfo*/ 1) {
 			$: {
 				startNewSong(fileInfo);
 			}
 		}
 
-		if ($$self.$$.dirty & /*midiFileInfo*/ 8) {
+		if ($$self.$$.dirty & /*midiFileInfo*/ 32) {
 			$: {
 				dispatch("midiChanched", midiFileInfo);
 			}
 		}
 
-		if ($$self.$$.dirty & /*playerState*/ 32) {
-			$: $$invalidate(1, buttonImage = getButtonImage(playerState));
+		if ($$self.$$.dirty & /*playerState*/ 64) {
+			$: $$invalidate(3, buttonImage = getButtonImage(playerState));
 		}
 	};
 
-	return [progress, buttonImage, playBtnHandler, midiFileInfo, fileInfo];
+	return [fileInfo, progress, loading, buttonImage, playBtnHandler, midiFileInfo];
 }
 
 class Controls_ui extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 4, midiFileInfo: 3 });
+		init(this, options, instance, create_fragment, safe_not_equal, { fileInfo: 0, midiFileInfo: 5 });
 	}
 }
 
