@@ -1,6 +1,7 @@
 <script>
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
     import { createEventDispatcher } from 'svelte';
+    import InstrumentsListUI from 'src/compound-components/player-ui/instruments-list'
 
     export let fileInfo = undefined;
     export let midiFileInfo = undefined;
@@ -49,6 +50,8 @@
 </script>
 
 <center>
+    <InstrumentsListUI player={player} midiFileInfo={midiFileInfo}/>
+
     {#if !fileInfo}
     <button disabled style="filter: opacity(0.5);">
         <img  src={buttonImage} alt="кнопка играть" >
@@ -81,6 +84,11 @@
     @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
     @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
     @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+
+
+
 
     button {
         padding: 0;

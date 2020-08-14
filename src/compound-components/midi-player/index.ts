@@ -1,7 +1,6 @@
 import { MidiReader, MidiReaderEvent } from 'src/components/midi-reader';
 import { Instrument, SoundfontInstrument, SilentInstrument } from 'src/components/instrument';
-import { getInstrumentByNumber }from 'src/components/instrument/instruments_list'
-import { instrument } from 'soundfont-player';
+
 
 export enum MidiPlayerState {
     playing,
@@ -67,9 +66,9 @@ export class MidiPlayer {
     }
     
 
-    // setInstrument(instrument: any, track: number) {
-
-    // }
+    async setInstrument(channel: number , instrument: string) {
+        this.instruments[channel] = await this.getInstrumentFromCashe(instrument);
+    }
 
     onStateChange(handler: (event: any) => void) {
         this.onStateChangeHandler = handler;

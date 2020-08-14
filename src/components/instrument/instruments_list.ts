@@ -133,7 +133,7 @@ export function getInstrumentByNumber(number: number):string  {
     return instrumentsList[number + 1].toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/ /g, '_')
 }
 
-export function getCurrentInstrumentsName(numbers: number[]) {
+export function getInstrumentsName(numbers: number[]) {
     const list = numbers.map(e => {
         return getInstrumentByNumber(e);
     });
