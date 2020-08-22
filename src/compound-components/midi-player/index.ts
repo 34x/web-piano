@@ -65,6 +65,11 @@ export class MidiPlayer {
             this.play();
         }
     }
+
+    async loadUserMidi(dataUri: string) {
+        await this.reader.loadDataUri(dataUri);
+        await this.loadInstruments();
+    }
     
 
     // setInstrument(instrument: any, track: number) {

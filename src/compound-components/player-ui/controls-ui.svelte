@@ -1,6 +1,7 @@
 <script>
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
     import { createEventDispatcher } from 'svelte';
+    import { readFile } from 'src/components/file-reader'
 
     export let fileInfo = undefined;
     export let midiFileInfo = undefined;
@@ -12,6 +13,8 @@
     let playerState = player.getState();
     let progress = 0;
     let loading;
+    let input;
+
 
     player.onStateChange(event => playerState = event.state);
     player.onProgressChange(event => progress = event.progress);
@@ -44,22 +47,33 @@
     const getButtonImage = (state) => state === MidiPlayerState.playing ? './pause.png' : './play.png';
 
     $: buttonImage = getButtonImage(playerState);
-    
 
+    document.addEventListener("DOMContentLoaded", () => {
+        input = document.getElementById('file');
+    });
+
+    async function loadBtnHandler() {
+        loading = true;
+        await readFile(input, player);
+        loading = false;
+        midiFileInfo = player.getInfo();
+    }
 </script>
 
 <center>
-    {#if !fileInfo}
-    <button disabled style="filter: opacity(0.5);">
+    <input type="file" id="file">
+    <button on:click={loadBtnHandler} >Загрузить</button>
+    {#if !midiFileInfo}
+    <button class="play-btn" disabled style="filter: opacity(0.5);">
         <img  src={buttonImage} alt="кнопка играть" >
     </button>
     {:else}
         {#if loading}
-            <button disabled style="cursor: auto;">
+            <button class="play-btn" disabled style="cursor: auto;">
                 <img class="image" src="./loading.png" alt="">
             </button>
         {:else}
-            <button on:click={playBtnHandler}>
+            <button class="play-btn" on:click={playBtnHandler}>
                 <img  src={buttonImage} alt="кнопка играть">
             </button>
         {/if}
@@ -82,7 +96,7 @@
     @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
     @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-    button {
+    .play-btn {
         padding: 0;
         border: none;
         font: inherit;
