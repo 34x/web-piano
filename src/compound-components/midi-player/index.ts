@@ -54,23 +54,25 @@ export class MidiPlayer {
     }
     
     async loadUrl(url: string) {
+        await this.load(url, this.reader.loadUrl.bind(this.reader));
+    }
+    
+    async loadUserMidi(dataUri: string) {
+        await this.load(dataUri, this.reader.loadDataUri.bind(this.reader));
+    }
+    
+    private async load(data: string, callback: Function) {
         const enterState = this.getState();
         if(enterState == MidiPlayerState.playing) {
             this.stop();
         }
-        await this.reader.loadUrl(url);
+        await callback(data);
         await this.loadInstruments();
         
         if(enterState == MidiPlayerState.playing) {
             this.play();
         }
     }
-
-    async loadUserMidi(dataUri: string) {
-        await this.reader.loadDataUri(dataUri);
-        await this.loadInstruments();
-    }
-    
 
     // setInstrument(instrument: any, track: number) {
 

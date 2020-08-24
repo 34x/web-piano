@@ -1,7 +1,7 @@
 <script>
     import { MidiPlayer, MidiPlayerState } from 'src/compound-components/midi-player';
     import { createEventDispatcher } from 'svelte';
-    import { readFile } from 'src/components/file-reader'
+    import FileInput from 'src/compound-components/player-ui/file-input'
 
     export let fileInfo = undefined;
     export let midiFileInfo = undefined;
@@ -13,8 +13,6 @@
     let playerState = player.getState();
     let progress = 0;
     let loading;
-    let input;
-
 
     player.onStateChange(event => playerState = event.state);
     player.onProgressChange(event => progress = event.progress);
@@ -48,21 +46,16 @@
 
     $: buttonImage = getButtonImage(playerState);
 
-    document.addEventListener("DOMContentLoaded", () => {
-        input = document.getElementById('file');
-    });
-
-    async function loadBtnHandler() {
+    async function userFileLoad(event) {
         loading = true;
-        await readFile(input, player);
+        await player.loadUserMidi(event.detail);
         loading = false;
         midiFileInfo = player.getInfo();
     }
 </script>
 
 <center>
-    <input type="file" id="file">
-    <button on:click={loadBtnHandler} >Загрузить</button>
+    <FileInput on:input={userFileLoad}></FileInput>
     {#if !midiFileInfo}
     <button class="play-btn" disabled style="filter: opacity(0.5);">
         <img  src={buttonImage} alt="кнопка играть" >
