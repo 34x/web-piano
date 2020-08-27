@@ -66,8 +66,14 @@ export class MidiPlayer {
     }
     
 
-    async setInstrument(channel: number , instrument: string) {
+    async setInstrument(channel: string , instrument: string) {
         this.instruments[channel] = await this.getInstrumentFromCashe(instrument);
+    }
+
+    async setInstruments(data: {[key:string]:string}) {
+        for (let channel of Object.keys(data)) {
+            await this.setInstrument(channel, data[channel]);
+        }
     }
 
     onStateChange(handler: (event: any) => void) {

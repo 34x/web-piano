@@ -7,16 +7,16 @@
     export let midiFileInfo;
 
     let instruments;
-    let instrumentsName = ["string_ensemble_1", "fretless_bass", "pan_flute", "choir_aahs", "voice_oohs", "synthstrings_1", "acoustic_guitar_steel", "acoustic_grand_piano", "guitar_fret_noise"];
+    let allInstrumentsName = ["string_ensemble_1", "fretless_bass", "pan_flute", "choir_aahs", "voice_oohs", "synthstrings_1", "acoustic_guitar_steel", "acoustic_grand_piano", "guitar_fret_noise"];
     let channels;
-    let selected;
+    let selected = {};
 
     async function loadNewInstrument (selected) {
-        await player.setInstrument(1, selected);
+        await player.setInstruments(selected);
     }
 
     $:instruments = midiFileInfo ? midiFileInfo.instrumentsChannel : undefined;
-        // instrumentsName = getInstrumentsName(midiFileInfo.instruments);
+    $:instrumentsName = midiFileInfo ? getInstrumentsName(midiFileInfo.instruments) : allInstrumentsName;
     $:channels = midiFileInfo ? Object.keys(midiFileInfo.instrumentsChannel) : undefined ;  
     $:loadNewInstrument (selected);
 </script>
@@ -25,8 +25,8 @@
     {#if midiFileInfo}
         {#each channels as channel, i}
             <div class="instruments__block">
-                <span class="channel">Channel {channels[i]}:</span>
-                <select bind:value="{selected}">
+                <span class="channel">Channel {channel}:</span>
+                <select bind:value="{selected[channel]}">
                     {#each instrumentsName as instrument, index}
                     <option value="{instrument}">{instrument}</option>
                     {/each}
