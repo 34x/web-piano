@@ -1,7 +1,7 @@
 <script>
     import { MidiPlayer} from 'src/compound-components/midi-player';
     import { createEventDispatcher } from 'svelte';
-    import { getInstrumentsName }from 'src/components/instrument/instruments_list'
+    import { getInstrumentsName } from 'src/components/instrument/instruments_list'
 
     export let player;
     export let midiFileInfo;

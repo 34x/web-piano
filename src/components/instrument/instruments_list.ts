@@ -134,8 +134,6 @@ export function getInstrumentByNumber(number: number):string  {
 }
 
 export function getInstrumentsName(numbers: number[]) {
-    const list = numbers.map(e => {
-        return getInstrumentByNumber(e);
-    });
+    const list = numbers.map(getInstrumentByNumber);
     return list
 }
