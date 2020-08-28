@@ -11,21 +11,6 @@
     }
 </script>
 
-<style>
-    .player-container {
-        width: 80em;
-    }
-
-    .piece-info {
-        margin: 0.4em;
-        height: 2em;
-    }
-    .midi-info {
-        margin: 0.4em;
-        height: 2em;
-    }
-</style>
-
 <div class="player-container">
     <div class="piece-info">
         {#if currentSong}
@@ -46,3 +31,18 @@
     <ControlsUI fileInfo={currentSong} on:midiChanched={midiChanched}/>
     <PlaylistUI selected={currentSong} on:songSelected={songSelected}/>
 </div>
+
+<style>
+    .player-container {
+        width: 80em;
+    }
+
+    .piece-info {
+        margin: 0.4em;
+        height: 2em;
+    }
+    .midi-info {
+        margin: 0.4em;
+        height: 2em;
+    }
+</style>
