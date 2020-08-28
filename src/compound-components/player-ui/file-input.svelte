@@ -1,25 +1,17 @@
 <script>
     import { readFile } from 'src/components/file-reader'
     import { createEventDispatcher } from 'svelte';
-
-    const dispatch = createEventDispatcher();
+    import { onMount } from 'svelte';
 
     let input;
 
-    document.addEventListener("DOMContentLoaded", () => {
-        input = document.getElementById('file');
-        input.addEventListener('change' , loadBtnHandler)
-    });
+    const dispatch = createEventDispatcher();
 
     function onFileLoaded(data) {
         dispatch('input', data);
     }
-
-    async function loadBtnHandler() {
-        await readFile(input, onFileLoaded);
-    }
 </script>
 
 <div>
-    <input type="file" id="file">
+    <input bind:this={input} type="file" id="file" on:change={readFile(input, onFileLoaded)}>
 </div>
