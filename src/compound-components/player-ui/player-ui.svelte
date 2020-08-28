@@ -31,7 +31,7 @@
         {#if currentSong}
             Now playing: <b>{currentSong.title}</b> ({currentSong.filename})
         {:else}
-            Please selecte a piece from playlist
+            Please select a piece from playlist
         {/if}
     </div>
     <div class="midi-info">
